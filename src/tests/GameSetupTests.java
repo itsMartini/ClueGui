@@ -16,8 +16,8 @@ import clueGame.Player;
 
 public class GameSetupTests {
 	private static Board board;
-	private static Card kitchenCard;
-	private static Card ballroomCard;
+	private static Card greenCenterCard;
+	private static Card berthodCard;
 	private static Card slateFoodCard;
 	private static Card brokenChairCard;
 	private static Card martinCard;
@@ -31,8 +31,8 @@ public class GameSetupTests {
 	public static void setup() {
 		board = new Board();
 		
-		kitchenCard = new Card("Kitchen", CardType.ROOM);
-		ballroomCard = new Card("Ballroom", CardType.ROOM);
+		greenCenterCard = new Card("Green Center", CardType.ROOM);
+		berthodCard = new Card("Berthod", CardType.ROOM);
 		slateFoodCard = new Card("Slate Food", CardType.WEAPON);
 		brokenChairCard = new Card("Broken Chair", CardType.WEAPON);
 		martinCard = new Card("Martin", CardType.PERSON);
@@ -89,8 +89,8 @@ public class GameSetupTests {
 		// check if deck contains six specific cards (two of each type)
 		assertTrue(board.getDeck().contains(martinCard));
 		assertTrue(board.getDeck().contains(ganeshCard));
-		assertTrue(board.getDeck().contains(kitchenCard));
-		assertTrue(board.getDeck().contains(ballroomCard));
+		assertTrue(board.getDeck().contains(greenCenterCard));
+		assertTrue(board.getDeck().contains(berthodCard));
 		assertTrue(board.getDeck().contains(slateFoodCard));
 		assertTrue(board.getDeck().contains(brokenChairCard));
 	}

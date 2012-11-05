@@ -21,10 +21,10 @@ public class BoardInitTests {
 	{
 		Map<Character, String> rooms = board.getRooms();
 		assertEquals(NUM_ROOMS, rooms.size());
-		assertEquals("Kitchen", rooms.get('K'));
-		assertEquals("Study", rooms.get('S'));
-		assertEquals("Closet", rooms.get('X'));
-		assertEquals("Artillery Room", rooms.get('A'));
+		assertEquals("Green Center", rooms.get('G'));
+		assertEquals("Stratton", rooms.get('S'));
+		assertEquals("Kafadar", rooms.get('X'));
+		assertEquals("Alderson", rooms.get('A'));
 		assertEquals("Walkway", rooms.get('W'));
 	}
 	
@@ -78,11 +78,11 @@ public class BoardInitTests {
 	@Test
 	public void testRoomInitial()
 	{
-		assertEquals('K', board.getRoomCellAt(0, 0).getRoomInitial());
+		assertEquals('G', board.getRoomCellAt(0, 0).getRoomInitial());
 		assertEquals('S', board.getRoomCellAt(19, 17).getRoomInitial());
-		assertEquals('L', board.getRoomCellAt(19, 0).getRoomInitial());
+		assertEquals('U', board.getRoomCellAt(19, 0).getRoomInitial());
 		assertEquals('C', board.getRoomCellAt(0, 17).getRoomInitial());
-		assertEquals('G', board.getRoomCellAt(6, 16).getRoomInitial());
+		assertEquals('Y', board.getRoomCellAt(6, 16).getRoomInitial());
 	}
 	
 	@Test

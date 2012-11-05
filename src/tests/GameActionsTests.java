@@ -23,15 +23,15 @@ public class GameActionsTests {
 	
 	private static Board board;
 	
-	private static Card kitchenCard;
-	private static Card ballRoomCard;
-	private static Card conservatoryCard;
-	private static Card diningRoomCard;
-	private static Card gameRoomCard;
-	private static Card loungeCard;
-	private static Card hallCard;
-	private static Card artilleryRoomCard;
-	private static Card studyCard;
+	private static Card greenCenterCard;
+	private static Card marquezCard;
+	private static Card aldersonCard;
+	private static Card gugenheimCard;
+	private static Card chauvenetCard;
+	private static Card strattonCard;
+	private static Card meyerCard;
+	private static Card berthodCard;
+	private static Card brownCard;
 	
 	private static Card slateFoodCard;
 	private static Card brokenChairCard;
@@ -39,7 +39,7 @@ public class GameActionsTests {
 	private static Card vatOfOilCard;
 	private static Card raCard;
 	private static Card laserCard;
-	
+
 	private static Card martinCard;
 	private static Card ganeshCard;
 	private static Card strongCard;
@@ -58,15 +58,15 @@ public class GameActionsTests {
 	public static void setup() {
 		board = new Board();
 		
-		kitchenCard = new Card("Kitchen", CardType.ROOM);
-		ballRoomCard = new Card("Ballroom", CardType.ROOM);
-		conservatoryCard = new Card("Conservatory", CardType.ROOM);
-		diningRoomCard = new Card("Dining Room", CardType.ROOM);
-		gameRoomCard = new Card("Game Room", CardType.ROOM);
-		loungeCard = new Card("Lounge", CardType.ROOM);
-		hallCard = new Card("Hall", CardType.ROOM);
-		artilleryRoomCard = new Card("Artillery Room", CardType.ROOM);
-		studyCard = new Card("Study", CardType.ROOM);
+		greenCenterCard = new Card("Green Center", CardType.ROOM);
+		marquezCard = new Card("Marquez", CardType.ROOM);
+		aldersonCard = new Card("Alderson", CardType.ROOM);
+		gugenheimCard = new Card("Gugenheim", CardType.ROOM);
+		chauvenetCard = new Card("Chauvenet", CardType.ROOM);
+		strattonCard = new Card("Stratton", CardType.ROOM);
+		meyerCard = new Card("Meyer", CardType.ROOM);
+		berthodCard = new Card("Berthod", CardType.ROOM);
+		brownCard = new Card("Brown", CardType.ROOM);
 		
 		slateFoodCard = new Card("Slate Food", CardType.WEAPON);
 		brokenChairCard = new Card("Broken Chair", CardType.WEAPON);
@@ -93,16 +93,16 @@ public class GameActionsTests {
 
 	@Test
 	public void checkAccusationTest() {
-		board.setSolution(new Solution("Jimbo", "Slate Food", "Kitchen"));
+		board.setSolution(new Solution("Jimbo", "Slate Food", "Green Center"));
 		// Check all 8 possible combinations of correct and incorrect guesses
-		assertTrue(board.checkAccusation("Jimbo", "Slate Food", "Kitchen"));
-		assertFalse(board.checkAccusation("Jimbo", "Slate Food", "Ballroom"));
-		assertFalse(board.checkAccusation("Jimbo", "Broken Chair", "Kitchen"));
-		assertFalse(board.checkAccusation("Bimbo", "Slate Food", "Kitchen"));
-		assertFalse(board.checkAccusation("Jimbo", "Broken Chair", "Ballroom"));
-		assertFalse(board.checkAccusation("Bimbo", "Broken Chair", "Kitchen"));
-		assertFalse(board.checkAccusation("Bimbo", "Slate Food", "Ballroom"));
-		assertFalse(board.checkAccusation("Bimbo", "Broken Chair", "Ballroom"));
+		assertTrue(board.checkAccusation("Jimbo", "Slate Food", "Green Center"));
+		assertFalse(board.checkAccusation("Jimbo", "Slate Food", "Marquez"));
+		assertFalse(board.checkAccusation("Jimbo", "Broken Chair", "Green Center"));
+		assertFalse(board.checkAccusation("Bimbo", "Slate Food", "Green Center"));
+		assertFalse(board.checkAccusation("Jimbo", "Broken Chair", "Marquez"));
+		assertFalse(board.checkAccusation("Bimbo", "Broken Chair", "Green Center"));
+		assertFalse(board.checkAccusation("Bimbo", "Slate Food", "Marquez"));
+		assertFalse(board.checkAccusation("Bimbo", "Broken Chair", "Marquez"));
 	}
 	
 	@Test
@@ -212,17 +212,17 @@ public class GameActionsTests {
 		player2.addCard(ganeshCard);
 		player2.addCard(raCard);
 		player2.addCard(slateFoodCard);
-		player2.addCard(loungeCard);
-		player2.addCard(hallCard);
-		Card suggested = player2.disproveSuggestion("Martin", "Kitchen", "Rock");
+		player2.addCard(strattonCard);
+		player2.addCard(meyerCard);
+		Card suggested = player2.disproveSuggestion("Martin", "Green Center", "Rock");
 		assertEquals(martinCard, suggested);
-		suggested = player2.disproveSuggestion("Hellman", "Lounge", "Rock");
-		assertEquals(loungeCard, suggested);
-		suggested = player2.disproveSuggestion("Hellman", "Kitchen", "Ra");
+		suggested = player2.disproveSuggestion("Hellman", "Stratton", "Rock");
+		assertEquals(strattonCard, suggested);
+		suggested = player2.disproveSuggestion("Hellman", "Green Center", "Ra");
 		assertEquals(raCard, suggested);
 		// Testing that null is returned if the player doesn't have a card to
 		// disprove with
-		suggested = player2.disproveSuggestion("Hellman", "Kitchen", "Rock");
+		suggested = player2.disproveSuggestion("Hellman", "Green Center", "Rock");
 		assertEquals(null, suggested);
 		
 		// Player chooses randomly between two possible cards.
@@ -231,10 +231,10 @@ public class GameActionsTests {
 		numPicked[0] = 0;
 		numPicked[1] = 0;
 		for (int i = 0; i < 200; ++i){
-			suggested = player2.disproveSuggestion("Martin", "Lounge", "Rock");
+			suggested = player2.disproveSuggestion("Martin", "Stratton", "Rock");
 			if(suggested.equals(martinCard)){
 				++numPicked[0];
-			} else if(suggested.equals(loungeCard)){
+			} else if(suggested.equals(strattonCard)){
 				++numPicked[1];
 			} else
 				fail("Invalid card suggested.");
@@ -248,7 +248,7 @@ public class GameActionsTests {
 		// We do this by adding two players with cards (one has previously been
 		// created) to the board and then dummy players that don't have cards.
 		player6.addCard(strongCard);
-		player6.addCard(studyCard);
+		player6.addCard(brownCard);
 		player6.addCard(rockCard);
 		Player dud = new ComputerPlayer();
 		// Add players to the board
@@ -262,10 +262,10 @@ public class GameActionsTests {
 		numPicked[0] = 0;
 		numPicked[1] = 0;
 		for(int i = 0; i < 200; ++i){
-			Card card = board.handleSuggestion("Strong", "Lounge", "Laser");
+			Card card = board.handleSuggestion("Strong", "Gugenheim", "Laser");
 			if(card.equals(strongCard)){
 				++numPicked[0];
-			} else if(card.equals(loungeCard)){
+			} else if(card.equals(strattonCard)){
 				++numPicked[1];
 			} else
 				fail("Invalid card returned (or null)");
@@ -278,19 +278,19 @@ public class GameActionsTests {
 		// Test that player that made suggestion doesn't return a card
 		// Need to create the players, manually give them their hands,
 		// set players to board players array, then test. NOTE: solution
-		// is mehta with the laser in the ballroom. We don't care about even
+		// is mehta with the laser in the Marquez. We don't care about even
 		// distribution of cards at the moment, that's already been tested.
-		player1.addCard(kitchenCard);
+		player1.addCard(greenCenterCard);
 		player1.addCard(vatOfOilCard);
-		player1.addCard(gameRoomCard);
+		player1.addCard(chauvenetCard);
 
-		player3.addCard(ballRoomCard);
-		player3.addCard(conservatoryCard);
+		player3.addCard(marquezCard);
+		player3.addCard(aldersonCard);
 		player3.addCard(raderCard);
 
-		player4.addCard(diningRoomCard);
+		player4.addCard(gugenheimCard);
 
-		player5.addCard(artilleryRoomCard);
+		player5.addCard(berthodCard);
 		player5.addCard(hellmanCard);
 		
 		// Add players to board	
@@ -309,8 +309,8 @@ public class GameActionsTests {
 		assertEquals(hellmanCard, card);
 
 		// Test that a card is returned from the HumanPlayer
-		card = board.handleSuggestion("Mehta", "Kitchen", "Laser");
-		assertEquals(kitchenCard, card);
+		card = board.handleSuggestion("Mehta", "Green Center", "Laser");
+		assertEquals(greenCenterCard, card);
 
 		// Test that ComputerPlayer that has card and whose turn it is doesn't return
 		// anything during a suggestion
@@ -321,7 +321,7 @@ public class GameActionsTests {
 		// Test that a HumanPlayer doesn't return a card when they have it and it's
 		// their turn during a suggestion
 		board.setCurrentPlayer(0);
-		card = board.handleSuggestion("Mehta", "Kitchen", "Vat of Oil");
+		card = board.handleSuggestion("Mehta", "Green Center", "Vat of Oil");
 		assertEquals(null, card);
 
 		// Testing for random cards returned with multiple players
@@ -330,10 +330,10 @@ public class GameActionsTests {
 		numPicked[1] = 0;
 		numPicked[2] = 0;
 		for(int i = 0; i < 300; ++i){
-			card = board.handleSuggestion("Hellman", "Kitchen", "Rock");
+			card = board.handleSuggestion("Hellman", "Green Center", "Rock");
 			if(card.equals(hellmanCard)){
 				++numPicked[0];
-			} else if(card.equals(kitchenCard)){
+			} else if(card.equals(greenCenterCard)){
 				++numPicked[1];
 			} else if(card.equals(rockCard)){
 				++numPicked[2];
@@ -353,17 +353,17 @@ public class GameActionsTests {
 		// Random suggestion, add cards that they've seen
 		player.updateSeen(martinCard);
 		player.updateSeen(brokenChairCard);
-		player.updateSeen(kitchenCard);
+		player.updateSeen(greenCenterCard);
 		player.setLastRoom('B');
 		// Make sure that the suggestion created aren't cards in the seen array
 		assertFalse(player.createSuggestion(board.getDeck()).person == "Martin");
 		assertFalse(player.createSuggestion(board.getDeck()).weapon == "Broken Chair");
-		assertEquals("Ballroom", player.createSuggestion(board.getDeck()).room);
+		assertEquals("Berthod", player.createSuggestion(board.getDeck()).room);
 		
 		// Correct suggestion
 		// We make sure the player has seen every weapon and person card except 
 		// one of each (Hellman and Ra)
-		player.setLastRoom('L');
+		player.setLastRoom('U');
 		player.updateSeen(raderCard);
 		player.updateSeen(ganeshCard);
 		player.updateSeen(mehtaCard);
@@ -373,7 +373,7 @@ public class GameActionsTests {
 		player.updateSeen(rockCard);
 		player.updateSeen(slateFoodCard);
 		assertEquals("Hellman", player.createSuggestion(board.getDeck()).person);
-		assertEquals("Lounge", player.createSuggestion(board.getDeck()).room);
+		assertEquals("Gugenheim", player.createSuggestion(board.getDeck()).room);
 		assertEquals("Ra", player.createSuggestion(board.getDeck()).weapon);
 	}
 }

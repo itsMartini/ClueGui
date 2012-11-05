@@ -38,7 +38,7 @@ public class Board {
 
 	// Use this section when testing my config file
 	private static final String LEGEND_FILE = "legend.csv";
-	private static final String CONFIG_FILE = "clue_board.csv";
+	private static final String CONFIG_FILE = "layout.csv";
 	private static final String PERSON_CARD_FILE = "person_cards.csv";
 	private static final String WEAPON_CARD_FILE = "weapon_cards.csv";
 
