@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Field;
@@ -15,9 +16,11 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
 
+import javax.swing.JPanel;
+
 import clueGame.Card.CardType;
 
-public class Board {
+public class Board extends JPanel {
 	private Map<Integer, LinkedList<Integer>> adjMatrix;
 	private Set<BoardCell> targets;
 	private Stack<BoardCell> path;
@@ -41,7 +44,10 @@ public class Board {
 	private static final String CONFIG_FILE = "layout.csv";
 	private static final String PERSON_CARD_FILE = "person_cards.csv";
 	private static final String WEAPON_CARD_FILE = "weapon_cards.csv";
-
+	
+	//We can specify the size of the board cells here
+	public static final int CELL_SIZE = 40;
+	
 	public Board() {
 		adjMatrix = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new TreeSet<BoardCell>();
@@ -86,6 +92,14 @@ public class Board {
 		return numColumns;
 	}
 
+	public LinkedList<Integer> getAdjList(int index) {
+		return adjMatrix.get(index);
+	}
+
+	public Set<BoardCell> getTargets() {
+		return targets;
+	}
+	
 	public void loadConfigFiles() {
 		try {
 			loadLegend();
@@ -499,12 +513,11 @@ public class Board {
 		Random rand = new Random();
 		return ret.get(rand.nextInt(ret.size()));
 	}	
-
-	public LinkedList<Integer> getAdjList(int index) {
-		return adjMatrix.get(index);
-	}
-
-	public Set<BoardCell> getTargets() {
-		return targets;
+	
+	public void paintComponent(Graphics g) {
+		for (BoardCell b : cells)
+		{
+			b.draw(g, CELL_SIZE);
+		}
 	}
 }
