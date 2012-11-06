@@ -25,6 +25,7 @@ public class ClueGame extends JFrame {
 		this.setJMenuBar(menu);
 		this.setTitle("Clue Game");
 		this.setSize(height, width);
+		this.setLocationRelativeTo(null);
 	}
 	
 	public JMenu createFileMenu()

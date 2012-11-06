@@ -42,12 +42,12 @@ public class Board extends JPanel {
 
 	// Use this section when testing my config file
 	private static final String LEGEND_FILE = "legend.csv";
-	private static final String CONFIG_FILE = "layout.csv";
+	private static final String CONFIG_FILE = "Layout.csv";
 	private static final String PERSON_CARD_FILE = "person_cards.csv";
 	private static final String WEAPON_CARD_FILE = "weapon_cards.csv";
 	
 	//We can specify the size of the board cells here
-	public static final int CELL_SIZE = 35;
+	public static int CELL_SIZE = 32;
 	
 	public Board() {
 		adjMatrix = new HashMap<Integer, LinkedList<Integer>>();
@@ -519,6 +519,10 @@ public class Board extends JPanel {
 	
 	public void paintComponent(Graphics g) {
 		Map<Character, Point> names = new HashMap<Character, Point>();
+		
+		// auto resize board to fit in window
+		CELL_SIZE = Math.min((int) (Math.floor(this.getSize().width / numColumns)),
+				(int) (Math.floor(this.getSize().height / numRows)));
 		
 		for (BoardCell b : cells)
 		{
