@@ -1,6 +1,8 @@
 package clueGame;
 
 import java.awt.Graphics;
+import java.awt.Point;
+import java.util.Map;
 
 public abstract class BoardCell implements Comparable<BoardCell> {
 	protected int row;
@@ -43,5 +45,5 @@ public abstract class BoardCell implements Comparable<BoardCell> {
 		return row + ", " + col;
 	}
 	
-	public abstract void draw(Graphics g, int cellSize);
+	public abstract void draw(Graphics g, int cellSize, Map<Character, Point> names);
 }

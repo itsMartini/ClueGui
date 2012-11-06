@@ -2,6 +2,7 @@ package clueGame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Field;
@@ -46,7 +47,7 @@ public class Board extends JPanel {
 	private static final String WEAPON_CARD_FILE = "weapon_cards.csv";
 	
 	//We can specify the size of the board cells here
-	public static final int CELL_SIZE = 40;
+	public static final int CELL_SIZE = 35;
 	
 	public Board() {
 		adjMatrix = new HashMap<Integer, LinkedList<Integer>>();
@@ -270,6 +271,12 @@ public class Board extends JPanel {
 										currentRow,
 										currentCol));
 									break;
+								case 'N':
+									cells.add(new RoomCell(RoomCell.DoorDirection.NAME, 
+											s.charAt(0),
+											currentRow,
+											currentCol));
+									break;
 								default:
 									// This will later be used to determine where
 									// the name goes on the room board
@@ -484,10 +491,6 @@ public class Board extends JPanel {
 		}
 	}
 
-	public void deal(ArrayList<String> cardList){
-		
-	}	
-
 	public boolean checkAccusation(String person, String weapon, String room){
 		return solution.person.equals(person) && solution.room.equals(room) && solution.weapon.equals(weapon);
 	}
@@ -515,9 +518,26 @@ public class Board extends JPanel {
 	}	
 	
 	public void paintComponent(Graphics g) {
+		Map<Character, Point> names = new HashMap<Character, Point>();
+		
 		for (BoardCell b : cells)
 		{
-			b.draw(g, CELL_SIZE);
+			b.draw(g, CELL_SIZE, names);
+		}
+		
+		for (Player p : players) 
+		{
+			int playerRow = this.getCellAt(p.getLocation()).row;
+			int playerCol = this.getCellAt(p.getLocation()).col;
+			
+			p.draw(g, CELL_SIZE, playerRow, playerCol);
+		}
+		
+		for (char c : names.keySet())
+		{
+			Point tempPoint = names.get(c);
+			g.setColor(Color.BLUE);
+			g.drawString(rooms.get(c).toUpperCase(), tempPoint.x, tempPoint.y);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -79,6 +80,12 @@ public class Player {
 		this.cards.add(card);
 	}
 	
-	
+	public void draw(Graphics g, int cellSize, int row, int col)
+	{
+		g.setColor(this.color);
+		g.fillOval((col*cellSize), (row*cellSize), cellSize, cellSize);
+		g.setColor(Color.BLACK);
+		g.drawOval((col*cellSize), (row*cellSize), cellSize, cellSize);
+	}
 }
 

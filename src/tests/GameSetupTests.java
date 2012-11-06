@@ -52,11 +52,11 @@ public class GameSetupTests {
 		assertEquals("Ganesh", player6.getName());
 		// check colors of players
 		assertEquals(Color.RED, player1.getColor());
-		assertEquals(Color.YELLOW, player2.getColor());
+		assertEquals(Color.GREEN, player2.getColor());
 		assertEquals(Color.PINK, player6.getColor());
 		// check starting locations of players
 		assertEquals(board.calcIndex(11, 17), player1.getLocation());
-		assertEquals(board.calcIndex(19, 12), player2.getLocation());
+		assertEquals(board.calcIndex(0, 4), player2.getLocation());
 		assertEquals(board.calcIndex(0, 12), player6.getLocation());
 	}
 	
