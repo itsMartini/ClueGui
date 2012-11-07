@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.io.FileNotFoundException;
@@ -48,6 +49,8 @@ public class Board extends JPanel {
 	
 	//We can specify the size of the board cells here
 	public static int CELL_SIZE = 32;
+	Font tempFont;
+	public static float font_size;
 	
 	public Board() {
 		adjMatrix = new HashMap<Integer, LinkedList<Integer>>();
@@ -72,6 +75,9 @@ public class Board extends JPanel {
 //		}
 		
 		solution = new Solution();
+		
+		tempFont = new Font(Font.MONOSPACED, Font.HANGING_BASELINE, 13);
+		this.setFont(tempFont);
 	}
 
 	public BoardCell getCellAt(int index) {
@@ -523,6 +529,11 @@ public class Board extends JPanel {
 		// auto resize board to fit in window
 		CELL_SIZE = Math.min((int) (Math.floor(this.getSize().width / numColumns)),
 				(int) (Math.floor(this.getSize().height / numRows)));
+		
+		// set the font for the room names
+		font_size = (float) (CELL_SIZE/2.5);
+		tempFont = tempFont.deriveFont(font_size);
+		this.setFont(tempFont);
 		
 		for (BoardCell b : cells)
 		{

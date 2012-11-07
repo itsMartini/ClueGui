@@ -1,5 +1,7 @@
 package clueGame;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,38 +14,60 @@ public class ClueGame extends JFrame {
 
 	private JMenuBar menu;
 	private static Board gameboard;
+	private DetectiveDialog notes;
 	
 	public ClueGame() {		
 		menu = new JMenuBar();
 		gameboard = new Board();
+		notes = new DetectiveDialog(gameboard.getDeck());
 		
 		menu.add(this.createFileMenu());
 		
-		int height = (int)(gameboard.CELL_SIZE * (gameboard.getNumColumns() + .5));
-		int width = (gameboard.CELL_SIZE * (gameboard.getNumRows() + 1)) + 30;
+		Dimension screenRes = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		// size according to screen resolution
+		int height = (int) (screenRes.height*0.9);
+		int width = height*47/56;
+		
+		// this sizes relative to the default cell size
+//		int width = (int)(gameboard.CELL_SIZE * (gameboard.getNumColumns() + .5));
+//		int height = (gameboard.CELL_SIZE * (gameboard.getNumRows() + 1)) + 30;
 		
 		this.setJMenuBar(menu);
-		this.setTitle("Clue Game");
-		this.setSize(height, width);
+		this.setTitle("Mines Clue");
+		this.setSize(width, height);
 		this.setLocationRelativeTo(null);
+		
+		
 	}
 	
 	public JMenu createFileMenu()
 	{
 		JMenu menu = new JMenu("File");
 		JMenuItem exit = new JMenuItem("Exit");
+		JMenuItem notes = new JMenuItem("Notes");
 		
-		class MenuItemListener implements ActionListener {
+		class ExitItemListener implements ActionListener {
 			public void actionPerformed (ActionEvent e)
 			{
 				System.exit(0);
 			}
 		}
 		
-		exit.addActionListener(new MenuItemListener());
+		notes.addActionListener(new NotesItemListener());
+		exit.addActionListener(new ExitItemListener());
+		menu.add(notes);
 		menu.add(exit);
 		
 		return menu;
+	}
+	
+	public class NotesItemListener implements ActionListener {
+		public void actionPerformed (ActionEvent e) {
+			notes.setVisible(true);
+			notes.setDefaultCloseOperation(HIDE_ON_CLOSE);
+			notes.setLocationRelativeTo(gameboard);
+		}
 	}
 	
 	/**

@@ -74,7 +74,7 @@ public class RoomCell extends BoardCell {
 		
 		if (this.doorDirection.equals(DoorDirection.NAME))
 		{
-			Point tempPoint = new Point((super.col) * cellSize, (super.row + 1) * cellSize);
+			Point tempPoint = new Point((super.col) * cellSize, (int) Math.floor((2*super.row + 1) * (cellSize/2.0)));
 			
 			names.put(this.roomInitial, tempPoint);
 		}
