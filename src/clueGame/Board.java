@@ -69,6 +69,8 @@ public class Board extends JPanel {
 		loadConfigFiles();
 		calcAdjacencies();
 		
+		this.deal();
+		
 		// for testing purposes only
 //		for (int i = 0; i < 6; ++i) {
 //			players.add(new Player("Jimbo", Color.MAGENTA, 0, new ArrayList<Card>()));

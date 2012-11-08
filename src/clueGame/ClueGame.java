@@ -16,18 +16,20 @@ public class ClueGame extends JFrame {
 	private JMenuBar menu;
 	private static Board gameboard;
 	private DetectiveDialog notes;
+	private PlayerDisplay playerCards;
 	
 	public ClueGame() {		
 		menu = new JMenuBar();
 		gameboard = new Board();
 		notes = new DetectiveDialog(gameboard.getDeck());
+		playerCards = new PlayerDisplay(gameboard.getPlayer(0).getCards());
 		
 		menu.add(this.createFileMenu());
 		
 		Dimension screenRes = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension minSize = new Dimension();
 		minSize.height = (int)(screenRes.height*0.6);
-		minSize.width =(int)(screenRes.width*0.3);
+		minSize.width = minSize.height*47/56;
 		
 		// size according to screen resolution
 		int height = (int) (screenRes.height*0.9);
@@ -39,6 +41,7 @@ public class ClueGame extends JFrame {
 		this.setMinimumSize(minSize);
 		this.setLocationRelativeTo(null);		
 		this.add(gameboard, BorderLayout.CENTER);
+		this.add(playerCards, BorderLayout.EAST);
 	}
 	
 	public JMenu createFileMenu()
