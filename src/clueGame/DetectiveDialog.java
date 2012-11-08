@@ -16,7 +16,7 @@ import javax.swing.border.TitledBorder;
 
 import clueGame.Card.CardType;
 
-public class DetectiveDialog extends JDialog{
+public class DetectiveDialog extends JDialog {
 	private List<Card> deck;
 	private PeoplePanel peeps;
 	private RoomsPanel rumes;
@@ -38,7 +38,7 @@ public class DetectiveDialog extends JDialog{
 		
 		Dimension screenRes = Toolkit.getDefaultToolkit().getScreenSize();
 		
-		int height = (int) (screenRes.height*0.9);
+		int height = (int) (screenRes.height*0.7);
 		int width = height*47/56;
 		setSize(width, height);
 		setLayout(new GridLayout(3,2));

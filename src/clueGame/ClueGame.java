@@ -1,5 +1,6 @@
 package clueGame;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -24,21 +25,20 @@ public class ClueGame extends JFrame {
 		menu.add(this.createFileMenu());
 		
 		Dimension screenRes = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension minSize = new Dimension();
+		minSize.height = (int)(screenRes.height*0.6);
+		minSize.width =(int)(screenRes.width*0.3);
 		
 		// size according to screen resolution
 		int height = (int) (screenRes.height*0.9);
 		int width = height*47/56;
 		
-		// this sizes relative to the default cell size
-//		int width = (int)(gameboard.CELL_SIZE * (gameboard.getNumColumns() + .5));
-//		int height = (gameboard.CELL_SIZE * (gameboard.getNumRows() + 1)) + 30;
-		
 		this.setJMenuBar(menu);
 		this.setTitle("Mines Clue");
 		this.setSize(width, height);
-		this.setLocationRelativeTo(null);
-		
-		
+		this.setMinimumSize(minSize);
+		this.setLocationRelativeTo(null);		
+		this.add(gameboard, BorderLayout.CENTER);
 	}
 	
 	public JMenu createFileMenu()
@@ -76,7 +76,6 @@ public class ClueGame extends JFrame {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		ClueGame clueGame = new ClueGame();
-		clueGame.setContentPane(gameboard);
 		clueGame.setVisible(true);
 		clueGame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}

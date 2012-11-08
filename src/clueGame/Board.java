@@ -524,6 +524,8 @@ public class Board extends JPanel {
 	}	
 	
 	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
 		Map<Character, Point> names = new HashMap<Character, Point>();
 		
 		// auto resize board to fit in window
