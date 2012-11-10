@@ -42,26 +42,26 @@ public class ControlPanel extends JPanel {
 		turnPanel.setLayout(new GridLayout(3,2));
 		turnPanel.add(turn);
 		turnPanel.add(turnValue);
-		turnValue.setText("Colonel Mustard");
+		this.setTurnText("Hellman");
 		turnValue.setEditable(false);
 		turnValue.setBorder(new EtchedBorder());
 		
 		dicePanel.setLayout(new GridLayout(1,0));
 		dicePanel.add(dice);
 		dicePanel.add(diceValue);
-		diceValue.setText("0");
+		this.setDiceText("0");
 		diceValue.setBorder(new EtchedBorder());
 		
 		guessPanel.setLayout(new GridLayout(0,1));
 		guessPanel.add(guess);
 		guessPanel.add(guessValue);
-		guessValue.setText("Mrs. Scarlett in the Kitchen with the Wrench");
+		this.setGuessText("Hellman", "Green Center", "Broken Chair");
 		guessValue.setBorder(new EtchedBorder());
 		
 		responsePanel.setLayout(new GridLayout(1,0));
 		responsePanel.add(response);
 		responsePanel.add(responseValue);
-		responseValue.setText("Kitchen");
+		this.setResponseText("Green Center");
 		responseValue.setBorder(new EtchedBorder());
 		
 		
@@ -71,6 +71,7 @@ public class ControlPanel extends JPanel {
 		//Turn label
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
+		gbc.insets = new Insets(0,0,0,10);
 		gbc.weightx=0.111;
 		gbc.weighty=0.25;
 		gbc.gridwidth = 1;
@@ -80,8 +81,9 @@ public class ControlPanel extends JPanel {
 		this.add(turn, gbc);
 		
 		//Turn value
-		gbc.fill = GridBagConstraints.NONE;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+		gbc.insets = new Insets(0,0,0,0);
 		gbc.weightx=0.222;
 		gbc.weighty=0.25;
 		gbc.gridwidth = 2;
@@ -114,7 +116,7 @@ public class ControlPanel extends JPanel {
 		this.add(accusation, gbc);
 		
 		//Dice panel
-		gbc.fill = GridBagConstraints.NONE;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.ipady=0;
 		gbc.weightx=0.222;
 		gbc.gridwidth = 2;
@@ -125,7 +127,7 @@ public class ControlPanel extends JPanel {
 		this.add(dicePanel, gbc);
 		
 		//Guess panel
-		gbc.fill = GridBagConstraints.NONE;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx=0.444;
 		gbc.weighty=0.5;
 		gbc.gridwidth = 4;
@@ -135,7 +137,7 @@ public class ControlPanel extends JPanel {
 		this.add(guessPanel, gbc);
 		
 		//Response panel
-		gbc.fill = GridBagConstraints.NONE;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx=0.333;
 		gbc.weighty=0.5;
 		gbc.gridwidth = 3;
@@ -145,4 +147,27 @@ public class ControlPanel extends JPanel {
 		this.add(responsePanel, gbc);
 	}
 	
+	public void setTurnText(String turnValue)
+	{
+		this.turnValue.setText(turnValue);
+		return;
+	}
+	
+	public void setDiceText(String diceValue)
+	{
+		this.diceValue.setText(diceValue);
+		return;
+	}
+	
+	public void setResponseText(String responseString)
+	{
+		this.responseValue.setText(responseString);
+		return;
+	}
+	
+	public void setGuessText(String personGuess, String roomGuess, String weaponGuess)
+	{
+		this.guessValue.setText(personGuess + " in " + roomGuess + " with a " + weaponGuess);
+		return;
+	}
 }
