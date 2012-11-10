@@ -17,12 +17,14 @@ public class ClueGame extends JFrame {
 	private static Board gameboard;
 	private DetectiveDialog notes;
 	private PlayerDisplay playerCards;
+	private ControlPanel controlPanel;
 	
 	public ClueGame() {		
 		menu = new JMenuBar();
 		gameboard = new Board();
 		notes = new DetectiveDialog(gameboard.getDeck());
 		playerCards = new PlayerDisplay(gameboard.getPlayer(0).getCards());
+		controlPanel = new ControlPanel();
 		
 		menu.add(this.createFileMenu());
 		
@@ -42,6 +44,7 @@ public class ClueGame extends JFrame {
 		this.setLocationRelativeTo(null);		
 		this.add(gameboard, BorderLayout.CENTER);
 		this.add(playerCards, BorderLayout.EAST);
+		this.add(controlPanel, BorderLayout.SOUTH);
 	}
 	
 	public JMenu createFileMenu()

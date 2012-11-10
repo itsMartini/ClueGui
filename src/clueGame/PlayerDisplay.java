@@ -1,5 +1,6 @@
 package clueGame;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
@@ -7,8 +8,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-
-import clueGame.Card.CardType;
 
 public class PlayerDisplay extends JPanel {
 	
@@ -34,7 +33,8 @@ public class PlayerDisplay extends JPanel {
 		rooms.setLayout(new GridLayout(0,1));
 		rooms.setBorder(new TitledBorder (new EtchedBorder(), "Rooms"));		
 		
-		this.setLayout(new GridLayout(0,1));
+		this.setLayout(new GridLayout(6,1));
+		this.setMinimumSize(new Dimension(40,0));
 		this.add(headerText);
 		this.add(people);
 		this.add(rooms);
@@ -44,15 +44,19 @@ public class PlayerDisplay extends JPanel {
 	
 	public void addCardLabels() {
 		for (Card c : playerCards) {
+			JLabel tempLabel = new JLabel();
+			tempLabel.setBorder(new EtchedBorder());
+			tempLabel.setText(c.getName());
+			
 			switch (c.getType()) {
 				case WEAPON:
-					weapons.add(new JLabel(c.getName()));
+					weapons.add(tempLabel);
 					break;
 				case PERSON:
-					people.add(new JLabel(c.getName()));
+					people.add(tempLabel);
 					break;
 				case ROOM:
-					rooms.add(new JLabel(c.getName()));
+					rooms.add(tempLabel);
 					break;
 				default: 
 					break;
