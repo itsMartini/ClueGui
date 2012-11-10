@@ -1,7 +1,9 @@
 package clueGame;
 
-import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -62,13 +64,85 @@ public class ControlPanel extends JPanel {
 		responseValue.setText("Kitchen");
 		responseValue.setBorder(new EtchedBorder());
 		
-		this.setLayout(new GridLayout(2,3));
-		this.add(turnPanel);
-		this.add(nextPlayer);
-		this.add(accusation);
-		this.add(dicePanel);
-		this.add(guessPanel);
-		this.add(responsePanel);
+		
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		
+		//Turn label
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
+		gbc.weightx=0.111;
+		gbc.weighty=0.25;
+		gbc.gridwidth = 1;
+		gbc.gridheight = 1;
+		gbc.gridx=0;
+		gbc.gridy=0;
+		this.add(turn, gbc);
+		
+		//Turn value
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+		gbc.weightx=0.222;
+		gbc.weighty=0.25;
+		gbc.gridwidth = 2;
+		gbc.gridheight = 1;
+		gbc.gridx=1;
+		gbc.gridy=0;
+		this.add(turnValue, gbc);
+		
+		//Next player button
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.ipady=40;
+		gbc.weightx=0.333;
+		gbc.weighty=0.5;
+		gbc.gridwidth = 3;
+		gbc.gridheight = 2;
+		gbc.gridx=3;
+		gbc.gridy=0;
+		this.add(nextPlayer, gbc);
+		
+		//Accusation button
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.ipady=40;
+		gbc.weightx=0.333;
+		gbc.weighty=0.5;
+		gbc.gridwidth = 3;
+		gbc.gridheight = 2;
+		gbc.gridx=6;
+		gbc.gridy=0;
+		this.add(accusation, gbc);
+		
+		//Dice panel
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.ipady=0;
+		gbc.weightx=0.222;
+		gbc.gridwidth = 2;
+		gbc.gridheight = 1;
+		gbc.weighty=0.5;
+		gbc.gridx=0;
+		gbc.gridy=2;
+		this.add(dicePanel, gbc);
+		
+		//Guess panel
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.weightx=0.444;
+		gbc.weighty=0.5;
+		gbc.gridwidth = 4;
+		gbc.gridheight = 1;
+		gbc.gridx=2;
+		gbc.gridy=2;
+		this.add(guessPanel, gbc);
+		
+		//Response panel
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.weightx=0.333;
+		gbc.weighty=0.5;
+		gbc.gridwidth = 3;
+		gbc.gridheight = 1;
+		gbc.gridx=6;
+		gbc.gridy=2;
+		this.add(responsePanel, gbc);
 	}
 	
 }
