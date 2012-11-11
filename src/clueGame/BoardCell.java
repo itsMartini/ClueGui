@@ -45,5 +45,5 @@ public abstract class BoardCell implements Comparable<BoardCell> {
 		return row + ", " + col;
 	}
 	
-	public abstract void draw(Graphics g, int cellSize, Map<Character, Point> names);
+	public abstract void draw(Graphics g, int cellSize, Map<Character, Point> names, boolean isTarget);
 }

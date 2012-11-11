@@ -21,8 +21,11 @@ public class WalkwayCell extends BoardCell {
 	}
 
 	@Override
-	public void draw(Graphics g, int cellSize, Map<Character, Point> names) {
-		g.setColor(Color.YELLOW);
+	public void draw(Graphics g, int cellSize, Map<Character, Point> names, boolean isTarget) {
+		if (isTarget)
+			g.setColor(new Color(120, 250, 220));
+		else
+			g.setColor(Color.YELLOW);
 		g.fillRect((super.col * cellSize), (super.row * cellSize), cellSize, cellSize);
 		g.setColor(Color.BLACK);
 		g.drawRect((super.col * cellSize), (super.row * cellSize), cellSize, cellSize);

@@ -44,8 +44,12 @@ public class RoomCell extends BoardCell {
 	}
 	
 	@Override
-	public void draw(Graphics g, int cellSize, Map<Character, Point> names) {
-		g.setColor(Color.LIGHT_GRAY);
+	public void draw(Graphics g, int cellSize, Map<Character, Point> names, boolean isTarget) {
+		
+		if (isTarget)
+			g.setColor(new Color(120, 250, 220));
+		else
+			g.setColor(Color.LIGHT_GRAY);
 		g.fillRect((super.col * cellSize), (super.row * cellSize), cellSize, cellSize);
 		
 		if (this.isDoorway())

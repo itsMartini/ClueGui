@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -23,10 +25,15 @@ public class ClueGame extends JFrame {
 		menu = new JMenuBar();
 		gameboard = new Board();
 		notes = new DetectiveDialog(gameboard.getDeck());
+		
+		//Once we have set up the detective dialogue set up then we can deal the cards
+		gameboard.deal();
+		
 		playerCards = new PlayerDisplay(gameboard.getPlayer(0).getCards());
-		controlPanel = new ControlPanel();
+		controlPanel = new ControlPanel(gameboard);
 		
 		menu.add(this.createFileMenu());
+		gameboard.addMouseListener(new BoardListener());
 		
 		Dimension screenRes = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension minSize = new Dimension();
@@ -74,6 +81,49 @@ public class ClueGame extends JFrame {
 			notes.setDefaultCloseOperation(HIDE_ON_CLOSE);
 			notes.setLocationRelativeTo(gameboard);
 		}
+	}
+	
+	public class BoardListener implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			int row = e.getY()/Board.CELL_SIZE;
+			int col = e.getX()/Board.CELL_SIZE;
+			int tempLocation = gameboard.calcIndex(row, col);
+			
+			if(gameboard.getTargets().contains(gameboard.getCellAt(tempLocation)))
+			{
+				gameboard.getPlayer(controlPanel.getPlayerTurn()).setLocation(tempLocation);
+				gameboard.repaint();
+			}
+			
+			controlPanel.finishCurrentTurn();
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}		
 	}
 	
 	/**

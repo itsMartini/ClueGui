@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Field;
@@ -33,6 +35,7 @@ public class Board extends JPanel {
 	private int numColumns;
 	
 	//We'll have player at 0 be human, all others be computer
+	public static final int NUM_PLAYERS = 6;
 	private ArrayList<Player> players;
 	private int currentPlayer;
 	private List<Card> deck;
@@ -52,6 +55,9 @@ public class Board extends JPanel {
 	Font tempFont;
 	public static float font_size;
 	
+	//We need to know whether or not to show the targets
+	private boolean showTargets = true;
+	
 	public Board() {
 		adjMatrix = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new TreeSet<BoardCell>();
@@ -69,14 +75,13 @@ public class Board extends JPanel {
 		loadConfigFiles();
 		calcAdjacencies();
 		
-		this.deal();
+		//We want to deal after we have initialized the detective notes dialogue
+		//this.deal();
 		
 		// for testing purposes only
 //		for (int i = 0; i < 6; ++i) {
 //			players.add(new Player("Jimbo", Color.MAGENTA, 0, new ArrayList<Card>()));
 //		}
-		
-		solution = new Solution();
 		
 		tempFont = new Font(Font.MONOSPACED, Font.HANGING_BASELINE, 13);
 		this.setFont(tempFont);
@@ -148,7 +153,7 @@ public class Board extends JPanel {
 					deck.add(new Card(personLine[0],Card.CardType.PERSON));
 				} else {
 					throw new BadConfigFormatException(PERSON_CARD_FILE,
-							"File requires name, row, columen, and a color.");
+							"File requires name, row, column, and a color.");
 				}
 			}
 		} catch (FileNotFoundException ex) {
@@ -480,7 +485,13 @@ public class Board extends JPanel {
 	public void deal(){
 		// Fisher Yates shuffling algorithm.
 		// Shuffling deck
-		System.out.println(deck);
+		//System.out.println(deck);
+		Card solutionPlayer = null;
+		Card solutionWeapon = null;
+		Card solutionRoom = null;
+		Solution solution;
+		int counter = 0;
+		
 		for(int i = deck.size()-1; i > 0; --i){
 			Card c = deck.get(i);
 			int j = rand.nextInt(i+1);
@@ -488,14 +499,60 @@ public class Board extends JPanel {
 			deck.set(j, c);
 			deck.set(i, dummy);
 		}
-		System.out.println(deck);
+		
+		while (solutionPlayer == null && counter < deck.size())
+		{
+			Card tempCard = deck.get(counter);
+			
+			if (deck.get(counter).getType() == CardType.PERSON)
+			{
+				solutionPlayer = tempCard;
+			}
+			
+			counter++;
+		}
+		
+		counter = 0;
+		while (solutionRoom == null && counter < deck.size())
+		{
+			Card tempCard = deck.get(counter);
+			
+			if (deck.get(counter).getType() == CardType.ROOM)
+			{
+				solutionRoom = tempCard;
+			}
+			
+			counter++;
+		}
+		
+		counter = 0;
+		while (solutionWeapon == null && counter < deck.size())
+		{
+			Card tempCard = deck.get(counter);
+			
+			if (deck.get(counter).getType() == CardType.WEAPON)
+			{
+				solutionWeapon = tempCard;
+			}
+			
+			counter++;
+		}
+		
+		solution = new Solution(solutionPlayer.getName(), solutionWeapon.getName(), solutionRoom.getName());
+		//System.out.println(deck);
 		// Deal cards
 		int p = 0;
 		for(Card c : deck){
-			Player player = players.get(p);
-			player.addCard(c);
-			players.set(p,player);
-			p = (p+1)%players.size();
+			//We need to make sure that the card being dealt isn't in the solution
+			if (!(c.equals(solutionPlayer) || 
+					c.equals(solutionRoom) ||
+					c.equals(solutionWeapon)))
+			{
+				Player player = players.get(p);
+				player.addCard(c);
+				players.set(p,player);
+				p = (p+1)%players.size();
+			}
 		}
 	}
 
@@ -541,7 +598,14 @@ public class Board extends JPanel {
 		
 		for (BoardCell b : cells)
 		{
-			b.draw(g, CELL_SIZE, names);
+			boolean isTarget = false;
+			
+			if (targets.contains(b) && showTargets)
+			{
+				isTarget = true;
+			}
+			
+			b.draw(g, CELL_SIZE, names, isTarget);
 		}
 		
 		for (Player p : players) 
@@ -558,5 +622,10 @@ public class Board extends JPanel {
 			g.setColor(Color.BLUE);
 			g.drawString(rooms.get(c).toUpperCase(), tempPoint.x, tempPoint.y);
 		}
+	}
+	
+	public void playerTurn(Player player, int dieRoll)
+	{
+		this.calcTargets(player.getLocation(), dieRoll);
 	}
 }

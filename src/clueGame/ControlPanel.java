@@ -4,6 +4,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -18,8 +21,11 @@ public class ControlPanel extends JPanel {
 	private JButton nextPlayer, accusation;
 	private JTextArea turnValue;
 	private JPanel turnPanel, dicePanel, guessPanel, responsePanel;
+	private int playerTurn = 0;
+	private int dieRoll = 0;
+	private Board gameboard;
 	
-	public ControlPanel() {
+	public ControlPanel(Board gameboard) {
 		turn = new JLabel("Whose Turn?");
 		dice = new JLabel("Roll");
 		guess = new JLabel("Guess");
@@ -34,6 +40,9 @@ public class ControlPanel extends JPanel {
 		guessPanel = new JPanel();
 		responsePanel = new JPanel();
 		turnPanel = new JPanel();
+		this.gameboard = gameboard;
+		
+		nextPlayer.addActionListener(new PlayerButtonListener());
 		
 		dicePanel.setBorder(new TitledBorder(new EtchedBorder(), "Die"));
 		guessPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess"));
@@ -42,26 +51,26 @@ public class ControlPanel extends JPanel {
 		turnPanel.setLayout(new GridLayout(3,2));
 		turnPanel.add(turn);
 		turnPanel.add(turnValue);
-		this.setTurnText("Hellman");
+		turnValue.setText("");
 		turnValue.setEditable(false);
 		turnValue.setBorder(new EtchedBorder());
 		
 		dicePanel.setLayout(new GridLayout(1,0));
 		dicePanel.add(dice);
 		dicePanel.add(diceValue);
-		this.setDiceText("0");
+		this.setDiceText("");
 		diceValue.setBorder(new EtchedBorder());
 		
 		guessPanel.setLayout(new GridLayout(0,1));
 		guessPanel.add(guess);
 		guessPanel.add(guessValue);
-		this.setGuessText("Hellman", "Green Center", "Broken Chair");
+		guessValue.setText("");
 		guessValue.setBorder(new EtchedBorder());
 		
 		responsePanel.setLayout(new GridLayout(1,0));
 		responsePanel.add(response);
 		responsePanel.add(responseValue);
-		this.setResponseText("Green Center");
+		responseValue.setText("");
 		responseValue.setBorder(new EtchedBorder());
 		
 		
@@ -147,6 +156,11 @@ public class ControlPanel extends JPanel {
 		this.add(responsePanel, gbc);
 	}
 	
+	public int getPlayerTurn()
+	{
+		return this.playerTurn;
+	}
+	
 	public void setTurnText(String turnValue)
 	{
 		this.turnValue.setText(turnValue);
@@ -169,5 +183,27 @@ public class ControlPanel extends JPanel {
 	{
 		this.guessValue.setText(personGuess + " in " + roomGuess + " with a " + weaponGuess);
 		return;
+	}
+	
+	public void finishCurrentTurn()
+	{
+		playerTurn = (playerTurn+1)%Board.NUM_PLAYERS;
+	}
+	
+	public class PlayerButtonListener implements ActionListener
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			Player tempPlayer = gameboard.getPlayer(playerTurn);
+			Random rand = new Random();
+			
+			dieRoll = (rand.nextInt(6) + 1);
+			setDiceText(String.valueOf(dieRoll));
+			
+			setTurnText(tempPlayer.getName());
+			gameboard.playerTurn(tempPlayer, dieRoll);
+		}
 	}
 }
