@@ -9,7 +9,9 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
@@ -21,8 +23,10 @@ public class ControlPanel extends JPanel {
 	private JButton nextPlayer, accusation;
 	private JTextArea turnValue;
 	private JPanel turnPanel, dicePanel, guessPanel, responsePanel;
-	private int playerTurn = 0;
+	private int playerTurn = -1;
 	private int dieRoll = 0;
+	private boolean turnFinished = true;
+	private boolean gameOver = false;
 	private Board gameboard;
 	
 	public ControlPanel(Board gameboard) {
@@ -51,26 +55,26 @@ public class ControlPanel extends JPanel {
 		turnPanel.setLayout(new GridLayout(3,2));
 		turnPanel.add(turn);
 		turnPanel.add(turnValue);
-		turnValue.setText("");
+		turnValue.setText("Rader");
 		turnValue.setEditable(false);
 		turnValue.setBorder(new EtchedBorder());
 		
 		dicePanel.setLayout(new GridLayout(1,0));
 		dicePanel.add(dice);
 		dicePanel.add(diceValue);
-		this.setDiceText("");
+		this.setDiceText("0");
 		diceValue.setBorder(new EtchedBorder());
 		
 		guessPanel.setLayout(new GridLayout(0,1));
 		guessPanel.add(guess);
 		guessPanel.add(guessValue);
-		guessValue.setText("");
+		guessValue.setText("No Guess Made");
 		guessValue.setBorder(new EtchedBorder());
 		
 		responsePanel.setLayout(new GridLayout(1,0));
 		responsePanel.add(response);
 		responsePanel.add(responseValue);
-		responseValue.setText("");
+		responseValue.setText("No New Clue");
 		responseValue.setBorder(new EtchedBorder());
 		
 		
@@ -187,7 +191,7 @@ public class ControlPanel extends JPanel {
 	
 	public void finishCurrentTurn()
 	{
-		playerTurn = (playerTurn+1)%Board.NUM_PLAYERS;
+		turnFinished = true;
 	}
 	
 	public class PlayerButtonListener implements ActionListener
@@ -196,14 +200,77 @@ public class ControlPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
-			Player tempPlayer = gameboard.getPlayer(playerTurn);
-			Random rand = new Random();
-			
-			dieRoll = (rand.nextInt(6) + 1);
-			setDiceText(String.valueOf(dieRoll));
-			
-			setTurnText(tempPlayer.getName());
-			gameboard.playerTurn(tempPlayer, dieRoll);
+			if (turnFinished)
+			{
+				playerTurn = (playerTurn+1)%Board.NUM_PLAYERS;
+				gameboard.setCurrentPlayer(playerTurn);
+				Player tempPlayer = gameboard.getPlayer(playerTurn);
+				Random rand = new Random();
+				
+				dieRoll = (rand.nextInt(6) + 1);
+				setDiceText(String.valueOf(dieRoll));
+				
+				setTurnText(tempPlayer.getName());
+				gameboard.calcTargets(tempPlayer.getLocation(), dieRoll);
+				
+				if (playerTurn != 0)
+				{
+					BoardCell moveCell = ((ComputerPlayer)tempPlayer).pickLocation(gameboard.getTargets());
+					tempPlayer.setLocation(gameboard.calcIndex(moveCell.row, moveCell.col));
+					
+					if (gameboard.getCellAt(tempPlayer.getLocation()).isRoom())
+					{
+						((ComputerPlayer)tempPlayer).setLastRoom(((RoomCell)moveCell).getRoomInitial());
+						Solution tempSolution = ((ComputerPlayer)tempPlayer).createSuggestion(gameboard.getDeck());
+						gameboard.movePlayer(tempSolution.getPerson(), tempPlayer.getLocation());
+						
+						Card resultCard = gameboard.handleSuggestion(tempSolution.getPerson(), 
+								tempSolution.getRoom(), 
+								tempSolution.getWeapon());
+						
+						setGuessText(tempSolution.getPerson(), tempSolution.getRoom(), tempSolution.getWeapon());
+						
+						if (resultCard == null)
+						{
+							setResponseText("No New Clue");
+							gameOver = gameboard.checkAccusation(tempSolution.getPerson(), tempSolution.getWeapon(), tempSolution.getRoom());
+							
+							if (gameOver)
+							{
+								JOptionPane.showMessageDialog(new JFrame(),
+										tempPlayer.getName() + " correctly accused " + tempSolution.getPerson() +
+										" in the " + tempSolution.getRoom() + " with a " + tempSolution.getWeapon() + "\nGame Over!",
+										tempPlayer.getName() + " Wins",
+										JOptionPane.INFORMATION_MESSAGE);
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(new JFrame(),
+										tempPlayer.getName() + " incorrectly accused " + tempSolution.getPerson() +
+										" in the " + tempSolution.getRoom() + " with a " + tempSolution.getWeapon() + "\nKeep Playing!",
+										tempPlayer.getName() + " Accusation",
+										JOptionPane.INFORMATION_MESSAGE);
+							}
+						}
+						else
+						{
+							setResponseText(resultCard.getName());
+						}
+					}
+					
+					finishCurrentTurn();
+					return;
+				}
+				
+				turnFinished = false;
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(new JFrame(),
+				    "You must complete your turn first!",
+				    "Turn Incomplete",
+				    JOptionPane.WARNING_MESSAGE);
+			}
 		}
 	}
 }

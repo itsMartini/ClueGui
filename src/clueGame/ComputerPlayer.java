@@ -19,6 +19,7 @@ public class ComputerPlayer extends Player {
 	public ComputerPlayer(String name, Color color, int location, Map<Character, String> rooms) {
 		super(name, color, location);
 		this.rooms = new HashMap<Character, String>(rooms);
+		seenCards = new ArrayList<Card>();
 	}
 	
 	public ComputerPlayer(){
@@ -43,10 +44,7 @@ public class ComputerPlayer extends Player {
 				RoomCell tempRoom = (RoomCell) b;
 				if(lastRoom != tempRoom.getRoomInitial()){
 					return b;
-				} else {
-					tars.remove(b);
-					temp = tars.toArray(temp);
-				}
+				} 
 			}
 		}
 		return temp[rand.nextInt(tars.size())];
@@ -54,12 +52,13 @@ public class ComputerPlayer extends Player {
 
 	public Solution createSuggestion(List<Card> deck){
 		Random rand = new Random();
+		List<Card> localDeck = deck;
 		for (Card c : seenCards) {
-			deck.remove(c);
+			localDeck.remove(c);
 		}
 		ArrayList<Card> tempPerson = new ArrayList<Card>();
 		ArrayList<Card> tempWeapon = new ArrayList<Card>();
-		for (Card c : deck) {
+		for (Card c : localDeck) {
 			if(c.getType().equals(CardType.PERSON)){
 				tempPerson.add(c);
 			} else if (c.getType().equals(CardType.WEAPON)){
@@ -71,6 +70,12 @@ public class ComputerPlayer extends Player {
 				, rooms.get(lastRoom));
 	}
 
+	@Override
+	public void addCard(Card card) {
+		super.addCard(card);
+		this.updateSeen(card);
+	}
+	
 	public void updateSeen(Card seen){
 		seenCards.add(seen);
 	}

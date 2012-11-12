@@ -55,9 +55,6 @@ public class Board extends JPanel {
 	Font tempFont;
 	public static float font_size;
 	
-	//We need to know whether or not to show the targets
-	private boolean showTargets = true;
-	
 	public Board() {
 		adjMatrix = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new TreeSet<BoardCell>();
@@ -67,7 +64,7 @@ public class Board extends JPanel {
 		numRows = -1;
 		numColumns = -1;
 		rand = new Random();
-		currentPlayer = 0; // we start on the human player
+		currentPlayer = -1; // we start on the human player
 		deck = new ArrayList<Card>();
 		players = new ArrayList<Player>();
 		solution = new Solution();
@@ -98,6 +95,10 @@ public class Board extends JPanel {
 		return rooms;
 	}
 
+	public String getRoom(char roomInitial) {
+		return rooms.get(roomInitial);
+	}
+	
 	public int getNumRows() {
 		return numRows;
 	}
@@ -548,9 +549,9 @@ public class Board extends JPanel {
 					c.equals(solutionRoom) ||
 					c.equals(solutionWeapon)))
 			{
-				Player player = players.get(p);
-				player.addCard(c);
-				players.set(p,player);
+				players.get(p).addCard(c);
+				//player.addCard(c);
+				//players.set(p,player);
 				p = (p+1)%players.size();
 			}
 		}
@@ -582,6 +583,19 @@ public class Board extends JPanel {
 		return ret.get(rand.nextInt(ret.size()));
 	}	
 	
+	public void movePlayer(String player, int location)
+	{
+		for (Player p : players)
+		{
+			if (player.equals(p.getName()))
+			{
+				p.setLocation(location);
+				break;
+			}
+		}
+		return;
+	}
+	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
@@ -598,14 +612,14 @@ public class Board extends JPanel {
 		
 		for (BoardCell b : cells)
 		{
-			boolean isTarget = false;
+			boolean showTarget = false;
 			
-			if (targets.contains(b) && showTargets)
+			if (targets.contains(b) && currentPlayer == 0)
 			{
-				isTarget = true;
+				showTarget = true;
 			}
 			
-			b.draw(g, CELL_SIZE, names, isTarget);
+			b.draw(g, CELL_SIZE, names, showTarget);
 		}
 		
 		for (Player p : players) 
@@ -622,10 +636,5 @@ public class Board extends JPanel {
 			g.setColor(Color.BLUE);
 			g.drawString(rooms.get(c).toUpperCase(), tempPoint.x, tempPoint.y);
 		}
-	}
-	
-	public void playerTurn(Player player, int dieRoll)
-	{
-		this.calcTargets(player.getLocation(), dieRoll);
 	}
 }

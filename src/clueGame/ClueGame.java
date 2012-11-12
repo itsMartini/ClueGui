@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 public class ClueGame extends JFrame {
 
@@ -20,11 +21,13 @@ public class ClueGame extends JFrame {
 	private DetectiveDialog notes;
 	private PlayerDisplay playerCards;
 	private ControlPanel controlPanel;
+	private SuggestionDialog suggestionDialog;
 	
 	public ClueGame() {		
 		menu = new JMenuBar();
 		gameboard = new Board();
 		notes = new DetectiveDialog(gameboard.getDeck());
+		suggestionDialog = new SuggestionDialog(gameboard.getDeck(), gameboard, controlPanel);
 		
 		//Once we have set up the detective dialogue set up then we can deal the cards
 		gameboard.deal();
@@ -52,6 +55,11 @@ public class ClueGame extends JFrame {
 		this.add(gameboard, BorderLayout.CENTER);
 		this.add(playerCards, BorderLayout.EAST);
 		this.add(controlPanel, BorderLayout.SOUTH);
+		
+		JOptionPane.showMessageDialog(this,
+			    "You are Rader, press 'Next Player' to begin the game.",
+			    "Welcome to Clue",
+			    JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	public JMenu createFileMenu()
@@ -88,17 +96,47 @@ public class ClueGame extends JFrame {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub
-			int row = e.getY()/Board.CELL_SIZE;
-			int col = e.getX()/Board.CELL_SIZE;
-			int tempLocation = gameboard.calcIndex(row, col);
 			
-			if(gameboard.getTargets().contains(gameboard.getCellAt(tempLocation)))
-			{
-				gameboard.getPlayer(controlPanel.getPlayerTurn()).setLocation(tempLocation);
-				gameboard.repaint();
+			if (gameboard.getCurrentPlayer() == 0)
+			{			
+				int row = e.getY()/Board.CELL_SIZE;
+				int col = e.getX()/Board.CELL_SIZE;
+				int tempLocation = gameboard.calcIndex(row, col);
+				
+				if(gameboard.getTargets().contains(gameboard.getCellAt(tempLocation)))
+				{
+					gameboard.getPlayer(controlPanel.getPlayerTurn()).setLocation(tempLocation);
+					gameboard.repaint();
+					gameboard.setCurrentPlayer(1);
+					
+					BoardCell tempCell = gameboard.getCellAt(gameboard.getPlayer(controlPanel.getPlayerTurn()).getLocation());
+					
+					if (tempCell.isRoom())
+					{						
+						suggestionDialog = new SuggestionDialog(gameboard.getDeck(),
+								gameboard.getRoom(((RoomCell)tempCell).getRoomInitial()), gameboard, controlPanel);
+						
+						suggestionDialog.setVisible(true);						
+						suggestionDialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					}
+				}
+				else 
+				{
+					JOptionPane.showMessageDialog(new JFrame(), 
+							"Invalid cell selected. Please select a valid target.",
+							"Invalid Cell Selected",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				
+				controlPanel.finishCurrentTurn();
 			}
-			
-			controlPanel.finishCurrentTurn();
+			else
+			{
+				JOptionPane.showMessageDialog(new JFrame(),
+				    "It is not your turn. Please press 'Next Player' to continue.",
+				    "Turn Incomplete",
+				    JOptionPane.WARNING_MESSAGE);
+			}
 		}
 
 		@Override
