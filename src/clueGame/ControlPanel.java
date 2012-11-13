@@ -209,7 +209,7 @@ public class ControlPanel extends JPanel {
 			if (turnFinished)
 			{
 				playerTurn = (playerTurn+1)%Board.NUM_PLAYERS;
-				gameboard.setPreviousPlayer(gameboard.getCurrentPlayer());
+				gameboard.setPreviousPlayer(playerTurn);
 				gameboard.setCurrentPlayer(playerTurn);
 				Player tempPlayer = gameboard.getPlayer(playerTurn);
 				Random rand = new Random();
@@ -222,51 +222,66 @@ public class ControlPanel extends JPanel {
 				
 				if (playerTurn != 0)
 				{
-					BoardCell moveCell = ((ComputerPlayer)tempPlayer).pickLocation(gameboard.getTargets());
-					tempPlayer.setLocation(gameboard.calcIndex(moveCell.row, moveCell.col));
-					
-					if (gameboard.getCellAt(tempPlayer.getLocation()).isRoom())
-					{
-						((ComputerPlayer)tempPlayer).setLastRoom(((RoomCell)moveCell).getRoomInitial());
-						Solution tempSolution = ((ComputerPlayer)tempPlayer).createSuggestion(gameboard.getDeck());
-						gameboard.movePlayer(tempSolution.getPerson(), tempPlayer.getLocation());
+					if (((ComputerPlayer) tempPlayer).getMakeAccusation()) {
+						gameOver = gameboard.checkAccusation(((ComputerPlayer)tempPlayer).getAccusation().getPerson(), 
+								((ComputerPlayer)tempPlayer).getAccusation().getWeapon(), 
+								((ComputerPlayer)tempPlayer).getAccusation().getRoom());
 						
-						Card resultCard = gameboard.handleSuggestion(tempSolution.getPerson(), 
-								tempSolution.getRoom(), 
-								tempSolution.getWeapon());
-						
-						setGuessText(tempSolution.getPerson(), tempSolution.getRoom(), tempSolution.getWeapon());
-						
-						if (resultCard == null)
+						if (gameOver)
 						{
-							setResponseText("No New Clue");
-							gameOver = gameboard.checkAccusation(tempSolution.getPerson(), tempSolution.getWeapon(), tempSolution.getRoom());
-							
-							if (gameOver)
-							{
-								JOptionPane.showMessageDialog(new JFrame(),
-										tempPlayer.getName() + " correctly accused " + tempSolution.getPerson() +
-										" in the " + tempSolution.getRoom() + " with " + tempSolution.getWeapon() + "\nGame Over!",
-										tempPlayer.getName() + " Wins",
-										JOptionPane.INFORMATION_MESSAGE);
-							}
-							else
-							{
-								JOptionPane.showMessageDialog(new JFrame(),
-										tempPlayer.getName() + " incorrectly accused " + tempSolution.getPerson() +
-										" in the " + tempSolution.getRoom() + " with " + tempSolution.getWeapon() + "\nKeep Playing!",
-										tempPlayer.getName() + " Accusation",
-										JOptionPane.INFORMATION_MESSAGE);
-							}
+							JOptionPane.showMessageDialog(new JFrame(),
+									tempPlayer.getName() + " correctly accused " + ((ComputerPlayer)tempPlayer).getAccusation().getPerson() +
+									" in " + ((ComputerPlayer)tempPlayer).getAccusation().getRoom() + " with " 
+									+ ((ComputerPlayer)tempPlayer).getAccusation().getWeapon() + "\nGame Over!",
+									tempPlayer.getName() + " Wins",
+									JOptionPane.INFORMATION_MESSAGE);
+							System.exit(0);
 						}
 						else
 						{
-							for (Player p : gameboard.getPlayers()) {
-								if (p.getId() > 0)
-									((ComputerPlayer)p).updateSeen(resultCard);
-							}
+							JOptionPane.showMessageDialog(new JFrame(),
+									tempPlayer.getName() + " incorrectly accused " + ((ComputerPlayer)tempPlayer).getAccusation().getPerson() +
+									" in " + ((ComputerPlayer)tempPlayer).getAccusation().getRoom() + " with " 
+									+ ((ComputerPlayer)tempPlayer).getAccusation().getWeapon() + "\nKeep Playing!",
+									tempPlayer.getName() + " Accusation",
+									JOptionPane.INFORMATION_MESSAGE);
 							
-							setResponseText(resultCard.getName());
+							((ComputerPlayer) tempPlayer).setMakeAccusation(false);
+						}
+					}
+					
+					else
+					{
+						BoardCell moveCell = ((ComputerPlayer)tempPlayer).pickLocation(gameboard.getTargets());
+						tempPlayer.setLocation(gameboard.calcIndex(moveCell.row, moveCell.col));
+						
+						if (gameboard.getCellAt(tempPlayer.getLocation()).isRoom())
+						{
+							((ComputerPlayer)tempPlayer).setLastRoom(((RoomCell)moveCell).getRoomInitial());
+							Solution tempSolution = ((ComputerPlayer)tempPlayer).createSuggestion(gameboard.getDeck());
+							gameboard.movePlayer(tempSolution.getPerson(), tempPlayer.getLocation());
+							
+							Card resultCard = gameboard.handleSuggestion(tempSolution.getPerson(), 
+									tempSolution.getRoom(), 
+									tempSolution.getWeapon());
+							
+							setGuessText(tempSolution.getPerson(), tempSolution.getRoom(), tempSolution.getWeapon());
+							
+							if (resultCard == null)
+							{
+								setResponseText("No New Clue");
+								((ComputerPlayer)tempPlayer).setAccusation(tempSolution);
+								((ComputerPlayer)tempPlayer).setMakeAccusation(true);
+							}
+							else
+							{
+								for (Player p : gameboard.getPlayers()) {
+									if (p.getId() > 0)
+										((ComputerPlayer)p).updateSeen(resultCard);
+								}
+								
+								setResponseText(resultCard.getName());
+							}
 						}
 					}
 					

@@ -1,7 +1,7 @@
 package clueGame;
 
 public class Solution {
-	public String person, weapon, room;
+	private String person, weapon, room;
 
 	public Solution(){
 		
