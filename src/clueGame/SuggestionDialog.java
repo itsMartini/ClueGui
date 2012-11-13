@@ -13,6 +13,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -213,7 +214,27 @@ public class SuggestionDialog extends JDialog {
 	    	}
 	    	else
 	    	{
-	    		controlPanel.setAccusationMade(false);
+	    		Player tempPlayer = gameboard.getPlayer(0);
+	    		boolean gameOver = gameboard.checkAccusation(personValue, weaponValue, roomValue);
+					    		
+				if (gameOver)
+				{
+					JOptionPane.showMessageDialog(new JFrame(),
+							tempPlayer.getName() + " correctly accused " + personValue +
+							" in " + roomValue + " with " + weaponValue + "\nGame Over!",
+							tempPlayer.getName() + " Wins",
+							JOptionPane.INFORMATION_MESSAGE);
+					System.exit(0);
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(new JFrame(),
+							tempPlayer.getName() + " incorrectly accused " + personValue +
+							" in " + roomValue + " with " + weaponValue + "\nKeep Playing!",
+							tempPlayer.getName() + " Accusation",
+							JOptionPane.INFORMATION_MESSAGE);
+					controlPanel.setAccusationMade(false);
+				}
 	    	}
 	    	
 	        setVisible(false);

@@ -322,11 +322,6 @@ public class ControlPanel extends JPanel {
 				accusationMade = true;
 				suggestionDialog = new SuggestionDialog(gameboard.getUnshuffledDeck(), gameboard, controlPanel);
 				suggestionDialog.setVisible(true);		
-				suggestionDialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			}
-			else if (!controlPanel.turnFinished)
-			{
-				
 			}
 			else
 			{
