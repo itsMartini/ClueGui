@@ -90,8 +90,9 @@ public class Player {
 		this.cards.add(card);
 	}
 	
-	public void draw(Graphics g, int cellSize, int row, int col, int numPlayers)
+	public void draw(Graphics g, int cellSize, int row, int col, ArrayList<Player> activePlayers)
 	{
+		int numPlayers = activePlayers.size();
 		final double OFFSET = 4;
 		int size;
 		if (numPlayers > 1) {
@@ -101,7 +102,7 @@ public class Player {
 			size = cellSize;
 		}
 		for (int i = 0; i < numPlayers; ++i) {
-			g.setColor(this.color);
+			g.setColor(activePlayers.get(i).color);
 			g.fillOval((int)((col+i/OFFSET)*cellSize), (int)((row+i/OFFSET)*cellSize), size, size);
 			g.setColor(Color.BLACK);
 			g.drawOval((int)((col+i/OFFSET)*cellSize), (int)((row+i/OFFSET)*cellSize), size, size);
