@@ -357,9 +357,9 @@ public class GameActionsTests {
 		player.updateSeen(greenCenterCard);
 		player.setLastRoom('B');
 		// Make sure that the suggestion created aren't cards in the seen array
-		assertFalse(player.createSuggestion(board.getDeck()).person == "Martin");
-		assertFalse(player.createSuggestion(board.getDeck()).weapon == "Broken Chair");
-		assertEquals("Berthoud", player.createSuggestion(board.getDeck()).room);
+		assertFalse(player.createSuggestion(board.getDeck()).getPerson() == "Martin");
+		assertFalse(player.createSuggestion(board.getDeck()).getWeapon() == "Broken Chair");
+		assertEquals("Berthoud", player.createSuggestion(board.getDeck()).getRoom());
 		
 		// Correct suggestion
 		// We make sure the player has seen every weapon and person card except 
@@ -373,8 +373,8 @@ public class GameActionsTests {
 		player.updateSeen(vatOfOilCard);
 		player.updateSeen(rockCard);
 		player.updateSeen(slateFoodCard);
-		assertEquals("Hellman", player.createSuggestion(board.getDeck()).person);
-		assertEquals("Gugenheim", player.createSuggestion(board.getDeck()).room);
-		assertEquals("Ra", player.createSuggestion(board.getDeck()).weapon);
+		assertEquals("Hellman", player.createSuggestion(board.getDeck()).getPerson());
+		assertEquals("Gugenheim", player.createSuggestion(board.getDeck()).getRoom());
+		assertEquals("Ra", player.createSuggestion(board.getDeck()).getWeapon());
 	}
 }

@@ -31,6 +31,7 @@ public class ClueGame extends JFrame {
 		
 		//Once we have set up the detective dialogue set up then we can deal the cards
 		gameboard.deal();
+		System.out.println(gameboard.getSolution());
 		
 		playerCards = new PlayerDisplay(gameboard.getPlayer(0).getCards());
 		controlPanel = new ControlPanel(gameboard);

@@ -15,17 +15,23 @@ public class ComputerPlayer extends Player {
 	private char lastRoom;
 	private ArrayList<Card> seenCards;
 	private Map<Character, String> rooms;
+	private boolean makeAccusation;
+	private Solution accusation;
 
 	public ComputerPlayer(String name, Color color, int location, Map<Character, String> rooms, int id) {
 		super(name, color, location, id);
 		this.rooms = new HashMap<Character, String>(rooms);
 		seenCards = new ArrayList<Card>();
+		makeAccusation = false;
+		accusation = new Solution();
 	}
 	
 	public ComputerPlayer(){
 		lastRoom = ' ';
 		seenCards = new ArrayList<Card>();
 		rooms = new HashMap<Character, String>();
+		makeAccusation = false;
+		accusation = new Solution();
 	}
 	
 	public ComputerPlayer(Map<Character, String> rooms){
@@ -33,6 +39,8 @@ public class ComputerPlayer extends Player {
 		lastRoom = ' ';
 		seenCards = new ArrayList<Card>();
 		this.rooms = new HashMap<Character, String>(rooms);
+		makeAccusation = false;
+		accusation = new Solution();
 	}
 
 	public BoardCell pickLocation(Set<BoardCell> tars){
@@ -77,7 +85,7 @@ public class ComputerPlayer extends Player {
 	}
 	
 	public void updateSeen(Card seen){
-		if (!cards.contains(seen))
+		if (!seenCards.contains(seen))
 			seenCards.add(seen);
 	}
 	
@@ -87,5 +95,21 @@ public class ComputerPlayer extends Player {
 	
 	public char getLastRoom() {
 		return lastRoom;
+	}
+	
+	public void setMakeAccusation(boolean makeAccusation) {
+		this.makeAccusation = makeAccusation;
+	}
+	
+	public boolean getMakeAccusation() {
+		return makeAccusation;
+	}
+	
+	public void setAccusation(Solution accusation) {
+		this.accusation = accusation;
+	}
+	
+	public Solution getAccusation() {
+		return accusation;
 	}
 }

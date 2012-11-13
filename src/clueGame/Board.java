@@ -511,7 +511,6 @@ public class Board extends JPanel {
 		Card solutionPlayer = null;
 		Card solutionWeapon = null;
 		Card solutionRoom = null;
-		Solution solution;
 		int counter = 0;
 		
 		for(int i = deck.size()-1; i > 0; --i){
@@ -579,7 +578,8 @@ public class Board extends JPanel {
 	}
 
 	public boolean checkAccusation(String person, String weapon, String room){
-		return solution.person.equals(person) && solution.room.equals(room) && solution.weapon.equals(weapon);
+		return solution.getPerson().equals(person) && solution.getRoom().equals(room) &&
+				solution.getWeapon().equals(weapon);
 	}
 
 	public Card handleSuggestion(String person, String room, String weapon){
