@@ -234,6 +234,8 @@ public class SuggestionDialog extends JDialog {
 							tempPlayer.getName() + " Accusation",
 							JOptionPane.INFORMATION_MESSAGE);
 					controlPanel.setAccusationMade(false);
+					controlPanel.finishCurrentTurn();
+					gameboard.setCurrentPlayer(1);
 				}
 	    	}
 	    	
