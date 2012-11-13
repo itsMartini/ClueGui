@@ -186,6 +186,7 @@ public class SuggestionDialog extends JDialog {
 	    	Card tempCard = gameboard.handleSuggestion(personValue, roomValue, weaponValue);
 	    	
 	    	controlPanel.setGuessText(personValue, roomValue, weaponValue);
+	    	gameboard.movePlayer(personValue);
 	    	
 	    	if (tempCard == null)
 	    	{

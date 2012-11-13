@@ -207,7 +207,8 @@ public class ControlPanel extends JPanel {
 			if (turnFinished)
 			{
 				playerTurn = (playerTurn+1)%Board.NUM_PLAYERS;
-				gameboard.setPreviousPlayer(gameboard.getCurrentPlayer());
+				System.out.println(playerTurn);
+				gameboard.setPreviousPlayer(playerTurn);
 				gameboard.setCurrentPlayer(playerTurn);
 				Player tempPlayer = gameboard.getPlayer(playerTurn);
 				Random rand = new Random();

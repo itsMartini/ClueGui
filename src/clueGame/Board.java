@@ -613,6 +613,15 @@ public class Board extends JPanel {
 		return;
 	}
 	
+	public void movePlayer(String player) {
+		for (Player p : players) {
+			if (player.equals(p.getName())) {
+				p.setLocation(players.get(0).getLocation());
+				break;
+			}
+		}
+	}
+	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		

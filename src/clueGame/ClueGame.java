@@ -111,7 +111,7 @@ public class ClueGame extends JFrame {
 					BoardCell tempCell = gameboard.getCellAt(gameboard.getPlayer(controlPanel.getPlayerTurn()).getLocation());
 					
 					if (tempCell.isRoom())
-					{						
+					{			
 						suggestionDialog = new SuggestionDialog(gameboard.getUnshuffledDeck(),
 								gameboard.getRoom(((RoomCell)tempCell).getRoomInitial()), gameboard, controlPanel);
 						
