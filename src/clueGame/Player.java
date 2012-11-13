@@ -92,7 +92,7 @@ public class Player {
 	
 	public void draw(Graphics g, int cellSize, int row, int col, int numPlayers)
 	{
-		final double OFFSET = 5;
+		final double OFFSET = 4;
 		int size;
 		if (numPlayers > 1) {
 			size  = 3*cellSize/(2*numPlayers); 
@@ -100,7 +100,7 @@ public class Player {
 		else {
 			size = cellSize;
 		}
-		for (int i = -numPlayers+1; i < numPlayers; i+=2) {
+		for (int i = 0; i < numPlayers; ++i) {
 			g.setColor(this.color);
 			g.fillOval((int)((col+i/OFFSET)*cellSize), (int)((row+i/OFFSET)*cellSize), size, size);
 			g.setColor(Color.BLACK);
