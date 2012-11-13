@@ -12,6 +12,7 @@ public class Player {
 	protected Color color;
 	protected int location;
 	protected ArrayList<Card> cards;
+	protected int id;
 	
 	public Player() {
 		name = "Jimbo";
@@ -20,11 +21,12 @@ public class Player {
 		cards = new ArrayList<Card>();
 	}
 	
-	public Player(String name, Color color, int location) {
+	public Player(String name, Color color, int location, int id) {
 		this.name = name;
 		this.color = color;
 		this.location = location;
 		cards = new ArrayList<Card>();
+		this.id = id;
 	}
 
 	public Card disproveSuggestion(String person, String room, String weapon){
@@ -44,6 +46,14 @@ public class Player {
 		return ret.get(rand.nextInt(ret.size()));
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
 	public String getName() {
 		return name;
 	}

@@ -26,8 +26,8 @@ public class ClueGame extends JFrame {
 	public ClueGame() {		
 		menu = new JMenuBar();
 		gameboard = new Board();
-		notes = new DetectiveDialog(gameboard.getDeck());
-		suggestionDialog = new SuggestionDialog(gameboard.getDeck(), gameboard, controlPanel);
+		notes = new DetectiveDialog(gameboard.getUnshuffledDeck());
+		suggestionDialog = new SuggestionDialog(gameboard.getUnshuffledDeck(), gameboard, controlPanel);
 		
 		//Once we have set up the detective dialogue set up then we can deal the cards
 		gameboard.deal();
@@ -95,8 +95,6 @@ public class ClueGame extends JFrame {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
 			if (gameboard.getCurrentPlayer() == 0)
 			{			
 				int row = e.getY()/Board.CELL_SIZE;
@@ -107,13 +105,14 @@ public class ClueGame extends JFrame {
 				{
 					gameboard.getPlayer(controlPanel.getPlayerTurn()).setLocation(tempLocation);
 					gameboard.repaint();
+					gameboard.setPreviousPlayer(0);
 					gameboard.setCurrentPlayer(1);
 					
 					BoardCell tempCell = gameboard.getCellAt(gameboard.getPlayer(controlPanel.getPlayerTurn()).getLocation());
 					
 					if (tempCell.isRoom())
 					{						
-						suggestionDialog = new SuggestionDialog(gameboard.getDeck(),
+						suggestionDialog = new SuggestionDialog(gameboard.getUnshuffledDeck(),
 								gameboard.getRoom(((RoomCell)tempCell).getRoomInitial()), gameboard, controlPanel);
 						
 						suggestionDialog.setVisible(true);						

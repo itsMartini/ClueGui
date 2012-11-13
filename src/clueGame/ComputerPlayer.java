@@ -16,8 +16,8 @@ public class ComputerPlayer extends Player {
 	private ArrayList<Card> seenCards;
 	private Map<Character, String> rooms;
 
-	public ComputerPlayer(String name, Color color, int location, Map<Character, String> rooms) {
-		super(name, color, location);
+	public ComputerPlayer(String name, Color color, int location, Map<Character, String> rooms, int id) {
+		super(name, color, location, id);
 		this.rooms = new HashMap<Character, String>(rooms);
 		seenCards = new ArrayList<Card>();
 	}
@@ -52,7 +52,7 @@ public class ComputerPlayer extends Player {
 
 	public Solution createSuggestion(List<Card> deck){
 		Random rand = new Random();
-		List<Card> localDeck = deck;
+		List<Card> localDeck = new ArrayList<Card>(deck);
 		for (Card c : seenCards) {
 			localDeck.remove(c);
 		}
@@ -77,7 +77,8 @@ public class ComputerPlayer extends Player {
 	}
 	
 	public void updateSeen(Card seen){
-		seenCards.add(seen);
+		if (!cards.contains(seen))
+			seenCards.add(seen);
 	}
 	
 	public void setLastRoom(char lastRoom) {

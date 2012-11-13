@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import clueGame.Card.CardType;
@@ -62,8 +63,10 @@ public class SuggestionDialog extends JDialog {
 		
 		Dimension screenRes = Toolkit.getDefaultToolkit().getScreenSize();
 		
+		height = (int) (screenRes.height*0.37);
+		width = height*5/3;
 		setSize(width, height);
-		setLayout(new GridLayout(4,2));
+		setLayout(new GridLayout(4,1));
 		add(knockKnock);
 		add(guessWho);
 		add(boomHeadshot);
@@ -182,6 +185,8 @@ public class SuggestionDialog extends JDialog {
 	    	
 	    	Card tempCard = gameboard.handleSuggestion(personValue, roomValue, weaponValue);
 	    	
+	    	controlPanel.setGuessText(personValue, roomValue, weaponValue);
+	    	
 	    	if (tempCard == null)
 	    	{
 	    		controlPanel.setResponseText("No New Clue");
@@ -189,7 +194,10 @@ public class SuggestionDialog extends JDialog {
     		else
     		{
 	    		controlPanel.setResponseText(tempCard.getName());
-	    		controlPanel.setGuessText(personValue, roomValue, weaponValue);
+	    		for (Player p : gameboard.getPlayers()) {
+					if (p.getId() > 0)
+						((ComputerPlayer)p).updateSeen(tempCard);
+				}
 	    	}
 	   
 	        setVisible(false);
@@ -200,7 +208,12 @@ public class SuggestionDialog extends JDialog {
 	{
 	     public void actionPerformed(ActionEvent e)
 	     {
-	    	setVisible(false);
+	    	if (controlPanel.getAccusationMade()) {
+	    		setVisible(false);
+	    	}
+	    	else {
+	    		JOptionPane.showMessageDialog(null, "You must make a suggestion", "NO CANCEL FOR YOU!", JOptionPane.ERROR_MESSAGE);
+	    	}
 	     }
 	}
 }

@@ -1,8 +1,10 @@
 package clueGame;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,16 +40,46 @@ public class DetectiveDialog extends JDialog {
 		
 		Dimension screenRes = Toolkit.getDefaultToolkit().getScreenSize();
 		
-		int height = (int) (screenRes.height*0.7);
-		int width = height*47/56;
+		int height = (int) (screenRes.height*0.5);
+		int width = height*56/51;
 		setSize(width, height);
-		setLayout(new GridLayout(3,2));
-		add(peeps);
-		add(guessWho);
-		add(rumes);
-		add(knockKnock);
-		add(wepins);
-		add(boomHeadshot);
+		GridBagLayout gbl = new GridBagLayout();
+		gbl.columnWidths = new int[2];
+		gbl.columnWidths[0] = width*13/20;
+		gbl.columnWidths[1] = width-gbl.columnWidths[0];
+		setLayout(gbl);
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		
+		gbc.gridx=0;
+		gbc.gridy=0;
+		add(peeps, gbc);
+		
+		gbc.gridx=1;
+		add(guessWho, gbc);
+		
+		gbc.gridx=0;
+		gbc.gridy=1;
+		add(rumes, gbc);
+		
+		gbc.gridx=1;
+		add(knockKnock, gbc);	
+		
+		gbc.gridx=0;
+		gbc.gridy=2;
+		add(wepins,gbc);
+		
+		gbc.gridx=1;
+		add(boomHeadshot, gbc);
+		
+		//GridLayout didn't look as nice
+		//setLayout(new GridLayout(3,2));
+//		add(peeps);
+//		add(guessWho);
+//		add(rumes);
+//		add(knockKnock);
+//		add(wepins);
+//		add(boomHeadshot);
 	}
 	
 	public class PeoplePanel extends JPanel {

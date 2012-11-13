@@ -27,6 +27,7 @@ public class ControlPanel extends JPanel {
 	private int dieRoll = 0;
 	private boolean turnFinished = true;
 	private boolean gameOver = false;
+	private boolean accusationMade = false;
 	private Board gameboard;
 	
 	public ControlPanel(Board gameboard) {
@@ -165,6 +166,10 @@ public class ControlPanel extends JPanel {
 		return this.playerTurn;
 	}
 	
+	public boolean getAccusationMade() {
+		return accusationMade;
+	}
+	
 	public void setTurnText(String turnValue)
 	{
 		this.turnValue.setText(turnValue);
@@ -185,7 +190,7 @@ public class ControlPanel extends JPanel {
 	
 	public void setGuessText(String personGuess, String roomGuess, String weaponGuess)
 	{
-		this.guessValue.setText(personGuess + " in " + roomGuess + " with a " + weaponGuess);
+		this.guessValue.setText(personGuess + " in " + roomGuess + " with " + weaponGuess);
 		return;
 	}
 	
@@ -199,10 +204,10 @@ public class ControlPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			// TODO Auto-generated method stub
 			if (turnFinished)
 			{
 				playerTurn = (playerTurn+1)%Board.NUM_PLAYERS;
+				gameboard.setPreviousPlayer(gameboard.getCurrentPlayer());
 				gameboard.setCurrentPlayer(playerTurn);
 				Player tempPlayer = gameboard.getPlayer(playerTurn);
 				Random rand = new Random();
@@ -239,7 +244,7 @@ public class ControlPanel extends JPanel {
 							{
 								JOptionPane.showMessageDialog(new JFrame(),
 										tempPlayer.getName() + " correctly accused " + tempSolution.getPerson() +
-										" in the " + tempSolution.getRoom() + " with a " + tempSolution.getWeapon() + "\nGame Over!",
+										" in the " + tempSolution.getRoom() + " with " + tempSolution.getWeapon() + "\nGame Over!",
 										tempPlayer.getName() + " Wins",
 										JOptionPane.INFORMATION_MESSAGE);
 							}
@@ -247,13 +252,18 @@ public class ControlPanel extends JPanel {
 							{
 								JOptionPane.showMessageDialog(new JFrame(),
 										tempPlayer.getName() + " incorrectly accused " + tempSolution.getPerson() +
-										" in the " + tempSolution.getRoom() + " with a " + tempSolution.getWeapon() + "\nKeep Playing!",
+										" in the " + tempSolution.getRoom() + " with " + tempSolution.getWeapon() + "\nKeep Playing!",
 										tempPlayer.getName() + " Accusation",
 										JOptionPane.INFORMATION_MESSAGE);
 							}
 						}
 						else
 						{
+							for (Player p : gameboard.getPlayers()) {
+								if (p.getId() > 0)
+									((ComputerPlayer)p).updateSeen(resultCard);
+							}
+							
 							setResponseText(resultCard.getName());
 						}
 					}

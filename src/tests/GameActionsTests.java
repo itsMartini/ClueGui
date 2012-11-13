@@ -172,7 +172,7 @@ public class GameActionsTests {
 		ComputerPlayer player = new ComputerPlayer();
 		// Location with room in targets which was last visited
 		board.calcTargets(board.calcIndex(17, 17), 5);
-		player.setLastRoom('S');
+		player.setLastRoom('G');
 		int loc_16_13tot = 0;
 		int loc_15_14tot = 0;
 		int loc_16_15tot = 0;
@@ -181,6 +181,7 @@ public class GameActionsTests {
 		// Run the test 500 times, count how many times each choice is chosen
 		for (int i = 0; i < 500; ++i) {
 			BoardCell selected = player.pickLocation(board.getTargets());
+			System.out.println(selected);
 			if (0 == selected.compareTo(board.getCellAt(board.calcIndex(16, 13))))
 				++loc_16_13tot;
 			else if (0 == selected.compareTo(board.getCellAt(board.calcIndex(15, 14))))
@@ -358,7 +359,7 @@ public class GameActionsTests {
 		// Make sure that the suggestion created aren't cards in the seen array
 		assertFalse(player.createSuggestion(board.getDeck()).person == "Martin");
 		assertFalse(player.createSuggestion(board.getDeck()).weapon == "Broken Chair");
-		assertEquals("Berthod", player.createSuggestion(board.getDeck()).room);
+		assertEquals("Berthoud", player.createSuggestion(board.getDeck()).room);
 		
 		// Correct suggestion
 		// We make sure the player has seen every weapon and person card except 

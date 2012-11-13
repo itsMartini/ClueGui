@@ -78,11 +78,11 @@ public class BoardInitTests {
 	@Test
 	public void testRoomInitial()
 	{
-		assertEquals('G', board.getRoomCellAt(0, 0).getRoomInitial());
-		assertEquals('S', board.getRoomCellAt(19, 17).getRoomInitial());
-		assertEquals('U', board.getRoomCellAt(19, 0).getRoomInitial());
+		assertEquals('R', board.getRoomCellAt(0, 0).getRoomInitial());
+		assertEquals('G', board.getRoomCellAt(19, 17).getRoomInitial());
+		assertEquals('Y', board.getRoomCellAt(19, 0).getRoomInitial());
 		assertEquals('C', board.getRoomCellAt(0, 17).getRoomInitial());
-		assertEquals('Y', board.getRoomCellAt(6, 16).getRoomInitial());
+		assertEquals('B', board.getRoomCellAt(6, 16).getRoomInitial());
 	}
 	
 	@Test

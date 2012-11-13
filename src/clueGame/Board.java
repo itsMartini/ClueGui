@@ -38,7 +38,9 @@ public class Board extends JPanel {
 	public static final int NUM_PLAYERS = 6;
 	private ArrayList<Player> players;
 	private int currentPlayer;
+	private int previousPlayer;
 	private List<Card> deck;
+	private List<Card> unshuffledDeck;
 	private Solution solution;
 	
 	//for all of our random generating needs
@@ -65,12 +67,16 @@ public class Board extends JPanel {
 		numColumns = -1;
 		rand = new Random();
 		currentPlayer = -1; // we start on the human player
+		previousPlayer = currentPlayer;
 		deck = new ArrayList<Card>();
+		
 		players = new ArrayList<Player>();
 		solution = new Solution();
 
 		loadConfigFiles();
 		calcAdjacencies();
+		
+		unshuffledDeck = new ArrayList<Card>(deck);
 		
 		//We want to deal after we have initialized the detective notes dialogue
 		//this.deal();
@@ -137,21 +143,24 @@ public class Board extends JPanel {
 			FileReader reader = new FileReader(PERSON_CARD_FILE);
 			Scanner scan = new Scanner(reader);
 			boolean first = true;
+			int currentId = 0;
 			while (scan.hasNext()) {
 				String inputLine = scan.nextLine();
 				String[] personLine = inputLine.split(",");
 				if (personLine.length == 4) {
 					if (first) {
 						players.add(new HumanPlayer(personLine[0].trim(),convertColor(personLine[3].trim()),
-								calcIndex(Integer.parseInt(personLine[1].trim()),Integer.parseInt(personLine[2].trim()))));
+								calcIndex(Integer.parseInt(personLine[1].trim()),Integer.parseInt(personLine[2].trim())),
+								currentId));
 						first = false;
 					} else {
 						players.add(new ComputerPlayer(personLine[0].trim(),convertColor(personLine[3].trim()),
 								calcIndex(Integer.parseInt(personLine[1].trim()),Integer.parseInt(personLine[2].trim())),
-								rooms));
+								rooms, currentId));
 					}
 					//players.add(new )
 					deck.add(new Card(personLine[0],Card.CardType.PERSON));
+					++currentId;
 				} else {
 					throw new BadConfigFormatException(PERSON_CARD_FILE,
 							"File requires name, row, column, and a color.");
@@ -459,6 +468,10 @@ public class Board extends JPanel {
 		return deck;
 	}
 	
+	public List<Card> getUnshuffledDeck() {
+		return unshuffledDeck;
+	}
+	
 	public void setSolution(Solution solution) {
 		this.solution = solution;
 	}
@@ -471,8 +484,16 @@ public class Board extends JPanel {
 		return currentPlayer;
 	}
 	
+	public int getPreviousPlayer() {
+		return previousPlayer;
+	}
+	
 	public void setCurrentPlayer(int p){
 		currentPlayer = p;
+	}
+	
+	public void setPreviousPlayer(int p) {
+		previousPlayer = p;
 	}
 	
 	public void setPlayerAt(Player player, int p){
@@ -505,7 +526,7 @@ public class Board extends JPanel {
 		{
 			Card tempCard = deck.get(counter);
 			
-			if (deck.get(counter).getType() == CardType.PERSON)
+			if (tempCard.getType() == CardType.PERSON)
 			{
 				solutionPlayer = tempCard;
 			}
@@ -518,7 +539,7 @@ public class Board extends JPanel {
 		{
 			Card tempCard = deck.get(counter);
 			
-			if (deck.get(counter).getType() == CardType.ROOM)
+			if (tempCard.getType() == CardType.ROOM)
 			{
 				solutionRoom = tempCard;
 			}
@@ -531,7 +552,7 @@ public class Board extends JPanel {
 		{
 			Card tempCard = deck.get(counter);
 			
-			if (deck.get(counter).getType() == CardType.WEAPON)
+			if (tempCard.getType() == CardType.WEAPON)
 			{
 				solutionWeapon = tempCard;
 			}
@@ -563,18 +584,14 @@ public class Board extends JPanel {
 
 	public Card handleSuggestion(String person, String room, String weapon){
 		ArrayList<Card> ret = new ArrayList<Card>();
+		Card temp = new Card();
 		for (Player p : players) {
-			if (currentPlayer < players.size() && p.getCards().equals(players.get(currentPlayer).getCards())) {
+			if (previousPlayer == p.getId()) {
 				continue;
 			}
-			for (Card c : p.getCards()) {
-				if (c.getName().equals(person) && c.getType().equals(CardType.PERSON)){
-					ret.add(c);
-				} else if (c.getName().equals(room) && c.getType().equals(CardType.ROOM)) {
-					ret.add(c);
-				} else if (c.getName().equals(weapon) && c.getType().equals(CardType.WEAPON)) {
-					ret.add(c);
-				}
+			temp = p.disproveSuggestion(person, room, weapon);
+			if (temp != null) {
+				ret.add(temp);
 			}
 		}
 		if(ret.size() == 0)
