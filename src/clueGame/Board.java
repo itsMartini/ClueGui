@@ -649,12 +649,23 @@ public class Board extends JPanel {
 			b.draw(g, CELL_SIZE, names, showTarget);
 		}
 		
+		int numPlayers[] = new int[6];
+		for (int i : numPlayers) {
+			i = 0;
+		}
+		
 		for (Player p : players) 
 		{
 			int playerRow = this.getCellAt(p.getLocation()).row;
 			int playerCol = this.getCellAt(p.getLocation()).col;
+			for (Player q : players) {
+				if (this.getCellAt(q.getLocation()).row == playerRow &&
+					this.getCellAt(q.getLocation()).col == playerCol) {
+						numPlayers[p.getId()]++;
+					}
+			}
 			
-			p.draw(g, CELL_SIZE, playerRow, playerCol);
+			p.draw(g, CELL_SIZE, playerRow, playerCol, numPlayers[p.getId()]);
 		}
 		
 		for (char c : names.keySet())

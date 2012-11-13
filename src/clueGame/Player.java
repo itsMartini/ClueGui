@@ -90,12 +90,22 @@ public class Player {
 		this.cards.add(card);
 	}
 	
-	public void draw(Graphics g, int cellSize, int row, int col)
+	public void draw(Graphics g, int cellSize, int row, int col, int numPlayers)
 	{
-		g.setColor(this.color);
-		g.fillOval((col*cellSize), (row*cellSize), cellSize, cellSize);
-		g.setColor(Color.BLACK);
-		g.drawOval((col*cellSize), (row*cellSize), cellSize, cellSize);
+		final double OFFSET = 5;
+		int size;
+		if (numPlayers > 1) {
+			size  = 3*cellSize/(2*numPlayers); 
+		}
+		else {
+			size = cellSize;
+		}
+		for (int i = -numPlayers+1; i < numPlayers; i+=2) {
+			g.setColor(this.color);
+			g.fillOval((int)((col+i/OFFSET)*cellSize), (int)((row+i/OFFSET)*cellSize), size, size);
+			g.setColor(Color.BLACK);
+			g.drawOval((int)((col+i/OFFSET)*cellSize), (int)((row+i/OFFSET)*cellSize), size, size);
+		}
 	}
 }
 
