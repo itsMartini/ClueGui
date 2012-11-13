@@ -561,6 +561,7 @@ public class Board extends JPanel {
 		}
 		
 		solution = new Solution(solutionPlayer.getName(), solutionWeapon.getName(), solutionRoom.getName());
+		this.solution = solution;
 		//System.out.println(deck);
 		// Deal cards
 		int p = 0;

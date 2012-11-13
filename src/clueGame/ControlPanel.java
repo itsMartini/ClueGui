@@ -19,6 +19,7 @@ import javax.swing.border.TitledBorder;
 
 public class ControlPanel extends JPanel {
 
+	private SuggestionDialog suggestionDialog;
 	private JLabel turn, dice, guess, response, diceValue, guessValue, responseValue;
 	private JButton nextPlayer, accusation;
 	private JTextArea turnValue;
@@ -48,6 +49,7 @@ public class ControlPanel extends JPanel {
 		this.gameboard = gameboard;
 		
 		nextPlayer.addActionListener(new PlayerButtonListener());
+		accusation.addActionListener(new AccusationButtonListener(this));
 		
 		dicePanel.setBorder(new TitledBorder(new EtchedBorder(), "Die"));
 		guessPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess"));
@@ -282,5 +284,39 @@ public class ControlPanel extends JPanel {
 				    JOptionPane.WARNING_MESSAGE);
 			}
 		}
+	}
+	
+	public class AccusationButtonListener implements ActionListener {
+		
+		private ControlPanel controlPanel;
+		
+		public AccusationButtonListener(ControlPanel controlPanel)
+		{
+			this.controlPanel = controlPanel;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			
+			if (!controlPanel.turnFinished && controlPanel.playerTurn == 0)
+			{
+				suggestionDialog = new SuggestionDialog(gameboard.getUnshuffledDeck(), gameboard, controlPanel);
+				suggestionDialog.setVisible(true);						
+				suggestionDialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			}
+			else if (!controlPanel.turnFinished)
+			{
+				
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(new JFrame(),
+					    "You must wait until your turn to make an accusation!",
+					    "Not Your Turn",
+					    JOptionPane.WARNING_MESSAGE);
+			}
+		}
+		
 	}
 }
