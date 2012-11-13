@@ -172,6 +172,10 @@ public class ControlPanel extends JPanel {
 		return accusationMade;
 	}
 	
+	public void setAccusationMade(boolean accusationMade) {
+		this.accusationMade = accusationMade;
+	}
+	
 	public void setTurnText(String turnValue)
 	{
 		this.turnValue.setText(turnValue);
@@ -312,12 +316,12 @@ public class ControlPanel extends JPanel {
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			// TODO Auto-generated method stub
 			
 			if (!controlPanel.turnFinished && controlPanel.playerTurn == 0)
 			{
+				accusationMade = true;
 				suggestionDialog = new SuggestionDialog(gameboard.getUnshuffledDeck(), gameboard, controlPanel);
-				suggestionDialog.setVisible(true);						
+				suggestionDialog.setVisible(true);		
 				suggestionDialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			}
 			else if (!controlPanel.turnFinished)

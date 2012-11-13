@@ -5,6 +5,8 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,14 +41,19 @@ public class SuggestionDialog extends JDialog {
 		boomHeadshot = new WeaponGuessPanel();
 		buttonPanel = new ButtonPanel();
 		
-		setTitle("Make an Accusation");
+		setTitle("Make an Accusation");		
 		
+		Dimension screenRes = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		height = (int) (screenRes.height*0.37);
+		width = height*5/3;
 		setSize(width, height);
 		setLayout(new GridLayout(4,2));
-		add(guessWho);
 		add(knockKnock);
+		add(guessWho);
 		add(boomHeadshot);
 		add(buttonPanel);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 	}
 	
 	public SuggestionDialog(List<Card> deck, String currentRoom, Board gameboard, ControlPanel controlPanel) {
@@ -71,6 +78,7 @@ public class SuggestionDialog extends JDialog {
 		add(guessWho);
 		add(boomHeadshot);
 		add(buttonPanel);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 	}
 
 	public Solution getGuess() {
@@ -185,22 +193,29 @@ public class SuggestionDialog extends JDialog {
 	    	
 	    	Card tempCard = gameboard.handleSuggestion(personValue, roomValue, weaponValue);
 	    	
-	    	controlPanel.setGuessText(personValue, roomValue, weaponValue);
-	    	gameboard.movePlayer(personValue);
-	    	
-	    	if (tempCard == null)
+	    	if (!controlPanel.getAccusationMade()) 
 	    	{
-	    		controlPanel.setResponseText("No New Clue");
+		    	controlPanel.setGuessText(personValue, roomValue, weaponValue);
+		    	gameboard.movePlayer(personValue);
+		    	
+		    	if (tempCard == null)
+		    	{
+		    		controlPanel.setResponseText("No New Clue");
+		    	}
+	    		else
+	    		{
+		    		controlPanel.setResponseText(tempCard.getName());
+		    		for (Player p : gameboard.getPlayers()) {
+						if (p.getId() > 0)
+							((ComputerPlayer)p).updateSeen(tempCard);
+					}
+		    	}
 	    	}
-    		else
-    		{
-	    		controlPanel.setResponseText(tempCard.getName());
-	    		for (Player p : gameboard.getPlayers()) {
-					if (p.getId() > 0)
-						((ComputerPlayer)p).updateSeen(tempCard);
-				}
+	    	else
+	    	{
+	    		controlPanel.setAccusationMade(false);
 	    	}
-	   
+	    	
 	        setVisible(false);
 	     }
 	}
@@ -211,6 +226,7 @@ public class SuggestionDialog extends JDialog {
 	     {
 	    	if (controlPanel.getAccusationMade()) {
 	    		setVisible(false);
+	    		controlPanel.setAccusationMade(false);
 	    	}
 	    	else {
 	    		JOptionPane.showMessageDialog(null, "You must make a suggestion", "NO CANCEL FOR YOU!", JOptionPane.ERROR_MESSAGE);
